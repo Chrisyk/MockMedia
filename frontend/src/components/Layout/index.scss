@@ -1,0 +1,48 @@
+.App{
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    background-color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.page{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow-x: hidden;
+    padding-left: 255px;
+    transition: padding-left 0.3s ease;
+}
+
+.trending {
+    position: sticky;
+    right: 0;
+    display: flex;
+    justify-content: center; // Add this line
+    padding-left: 0;
+    flex-grow: 0.12; // Add this line
+    padding: 10px 40px;
+    justify-items: center;
+    width: 20%; // Adjust this value as needed
+    background-color: #f5f5f500;
+    z-index: 3;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.app-bar{
+    width: 60px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    min-height: 500px;
+
+}
