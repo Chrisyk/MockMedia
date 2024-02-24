@@ -30,7 +30,7 @@ function Follow( {username, followed} ) {
         const result = await follow();
         setFollows(result.follows);
         window.location.reload();
-    }
+    };
     
     return(
         <>

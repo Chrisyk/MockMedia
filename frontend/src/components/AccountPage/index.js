@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar } from 'flowbite-react';
+import { Avatar} from 'flowbite-react';
 import { useParams } from 'react-router-dom';
 import GetAccount from '../GetAccount';
 import Banner from '../Banner';
 import PostTemplate from '../PostTemplate';
 import Axios from 'axios';
 import Follow from '../Follow';
+import UserList from '../UserList';
 
 function Account() {
     const {username} = useParams();
@@ -52,10 +53,11 @@ function Account() {
             </div>
             <p className="text-lg text-gray-600">{accountData.description}</p>
             <div className="flex gap-4">
-                <p className="text-lg font-semibold text-gray-800">{accountData.followed.length} Followers</p>
-                <p className="text-lg font-semibold text-gray-800">{accountData.following.length} Following</p>
+                <p className="text-lg font-semibold text-gray-800">{accountData.followed.length} </p> 
+                <UserList users={accountData.followed} text="Followers" title="Followers"/>
+                <p className="text-lg font-semibold text-gray-800">{accountData.following.length} </p>
+                <UserList users={accountData.following} text="Following" title="Following"/>
             </div>
-            
             <div className="mt-5 border-t pt-6">
             <h2 className="text-2xl font-bold mt-2">Posts</h2>
                 <PostTemplate posts={posts} Likes={Liked} />

@@ -39,6 +39,7 @@ const LoginPage = () => {
             });
             // Sets the token in the local storage
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('id', response.data.id);
             localStorage.setItem('username', username);
             navigate("/");
         } catch (error) {
