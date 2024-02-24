@@ -4,3 +4,7 @@ media/profpics/
 node_modules/
 ./frontend/node_modules/
 db.sqlite3
+
+socialMedia/__pycache__/
+socialMedia/migrations/
+backend/settings/__pycache__/
