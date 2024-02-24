@@ -9,7 +9,7 @@ MockMedia is a three-tier web application leveraging React, Django, and SQLite3.
 ## Technologies Used
 ### React:
 - Component Libraries: MUI and Flobite-React
-- CSS Architectures: Sass and TailwindCSS
+- CSS Architectures: TailwindCSS
 ### Django:
 - Django REST Framework
 ## Usage
