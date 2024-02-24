@@ -7,4 +7,4 @@ db.sqlite3
 
 socialMedia/__pycache__/
 socialMedia/migrations/
-backend/settings/__pycache__/
+backend/__pycache__/
