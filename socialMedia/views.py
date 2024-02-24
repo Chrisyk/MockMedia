@@ -9,8 +9,9 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from rest_framework.decorators import api_view
-from .models import Profile, Post, Image
 from rest_framework.permissions import IsAuthenticated
+from .models import Profile, Post, Image
+from .serializers import ProfileSerializer
 
 # API Request to login a user
 class LoginView(APIView):
@@ -27,7 +28,7 @@ class LoginView(APIView):
             profile.save()
 
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key}, status=status.HTTP_200_OK)
+        return Response({'token': token.key, 'id': user.id}, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
@@ -52,27 +53,41 @@ class RegisterView(APIView):
         return Response({'username': user.username}, status=status.HTTP_201_CREATED)
 
 # Gets the user's profile
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, username):
+        profile = get_object_or_404(Profile, user__username=username)
+        following = profile.following.all()
+        followed = profile.followers.all()
+        # Serialize the following and followed users
+        following_serializer = ProfileSerializer(following, context={'request': request}, many=True)
+        followed_serializer = ProfileSerializer(followed, context={'request': request}, many=True)
+
+        # Include the serialized following and followed users in the response
+        data = {
+            'username': profile.user.username, 
+            'profile_picture': request.build_absolute_uri(profile.picture.url) if profile.picture else None,
+            'banner': request.build_absolute_uri(profile.banner.url) if profile.banner else '',
+            'email': profile.user.email, 
+            'is_following': profile.followers.filter(id=request.user.id).exists(),
+            'description': profile.description if profile.description else '',
+            'post_ids': [post.id for post in profile.user.post_set.all()],
+            'following': following_serializer.data,
+            'followed': followed_serializer.data,
+        }
+        response = Response(data, status=status.HTTP_200_OK)
+        response["Access-Control-Allow-Origin"] = "*"  # Allow CORS
+        return Response(data, status=status.HTTP_200_OK)
+
+# Gets all users
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_user(request, username):
-    user = get_object_or_404(User, username=username)
-    profile = Profile.objects.filter(user=user).first()
-    if profile is None:
-        profile = Profile(user=user)
-        profile.save()
-    data = {
-        'username': user.username, 
-        'profile_picture': request.build_absolute_uri(profile.picture.url) if profile.picture else None,
-        'banner': request.build_absolute_uri(profile.banner.url) if profile.banner else '',
-        'email': user.email, 
-        'following': [user.user.username for user in profile.following.all()],
-        'followed': [follower.user.username for follower in profile.followers.all()],
-        'is_following': profile.followers.filter(id=request.user.id).exists(),
-        'description': profile.description if profile.description else '',
-        'post_ids': [post.id for post in profile.user.post_set.all()],
-    }
-    response = Response(data, status=status.HTTP_200_OK)
-    response["Access-Control-Allow-Origin"] = "*"  # Allow all origins
+def get_all_users(request):
+    profiles = Profile.objects.all()
+    profiles_serializer = ProfileSerializer(profiles, context={'request': request}, many=True)
+    response = Response(profiles_serializer.data, status=status.HTTP_200_OK)
+    response["Access-Control-Allow-Origin"] = "*"
     return response
 
 # Changes profile information
@@ -101,8 +116,6 @@ def change_profile(request, username):
     profile.save()
     user.save()
     return Response(status=status.HTTP_200_OK)
-
-# Gets all users
 
 # Gets all posts
 @api_view(["GET"])

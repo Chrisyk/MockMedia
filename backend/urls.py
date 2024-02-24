@@ -20,17 +20,18 @@ from django.urls import path
 from backend import settings
 from socialMedia.views import (
     LoginView, 
-    RegisterView, 
-    get_user, 
+    RegisterView,
+    ProfileView, 
     logout_view, 
     new_post, 
-    get_all_posts, 
+    get_all_posts,
     get_user_posts,
     get_post, 
     like_post, 
     new_reply, 
     delete_post, 
     change_profile,
+    get_all_users,
     follow_user,
 )
 
@@ -39,7 +40,8 @@ urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/logout/', logout_view, name='logout'),
     path('api/register/', RegisterView.as_view(), name='register'),
-    path('api/account/<str:username>/', get_user, name='get_user'),
+    path('api/accounts/', get_all_users, name='get_all_users'),
+    path('api/account/<str:username>/', ProfileView.as_view(), name='get_user'),
     path('api/account/<str:username>/change/', change_profile, name='change_profile'),
     path('api/account/<str:username>/follow/', follow_user, name='follow_user'),
     path('api/posts/', get_all_posts, name='get_all_posts'),
