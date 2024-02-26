@@ -3,7 +3,7 @@ import { Button } from 'flowbite-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function Follow( {username, followed} ) {
+function Follow( {username, onClick, followed} ) {
     const usernameLocal = localStorage.getItem('username');
     const [follows, setFollows] = useState(followed);
     const navigate = useNavigate();
@@ -29,7 +29,9 @@ function Follow( {username, followed} ) {
     const handleResponse = async() => {
         const result = await follow();
         setFollows(result.follows);
-        window.location.reload();
+        if (onClick) {
+            onClick();
+        }
     };
     
     return(

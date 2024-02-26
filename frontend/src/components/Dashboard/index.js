@@ -31,7 +31,7 @@ const Dashboard = () => {
         <Sidebar.Item href={`/account/${username}`} icon={PersonIcon}>
           Account
         </Sidebar.Item>
-        <Sidebar.Item href="#" icon={EmailIcon} labelColor="dark">
+        <Sidebar.Item href={`/messages`} icon={EmailIcon} labelColor="dark">
           Mail
         </Sidebar.Item>
         <Post />

@@ -7,6 +7,7 @@ class Profile(models.Model):
     description = models.TextField(blank=True, null=True)
     banner = models.ImageField(upload_to="banners", blank=True, null=True)
     following = models.ManyToManyField('self', related_name='followers', symmetrical=False, blank=True)
+    chats = models.ManyToManyField('Chat', related_name='chatted', blank=True)
 
     def __str__(self):
         return self.user.username
@@ -18,6 +19,22 @@ class Image(models.Model):
     image = models.ImageField(upload_to="imgs")
     def __str__(self):
         return str(self.image)
+    
+class Chat(models.Model):
+    chat = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='chat')
+    date = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.user.user.username + " - " + self.chat.user.username
+    
+class Message(models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    content = models.TextField()
+    images = models.ManyToManyField(Image, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.content
 
 class Post(models.Model):
     content = models.TextField()

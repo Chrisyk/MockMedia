@@ -1,10 +1,9 @@
 import React from 'react';
 import { Avatar, TextInput, Textarea, Button} from 'flowbite-react';
 import { useParams } from 'react-router-dom';
-import GetAccount from '../GetAccount';
 import { useState, useRef } from 'react';
 import { useEffect } from 'react';
-import axios from 'axios';
+import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Banner from '../Banner';
 
@@ -22,8 +21,23 @@ function EditAccount() {
     const [newBanner, setNewBanner] = useState(null);
     const [newBannerUrl, setNewBannerUrl] = useState(null);
     const [changed, setChanged] = useState([]);
-    const accountData = GetAccount(username);
+    const [accountData, setAccountData] = useState(null);
     const navigate = useNavigate();
+
+    // Get the account data
+    useEffect(() => {
+        Axios.get(`http://localhost:8000/api/account/${username}`, {
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('token')}`
+            },
+            withCredentials: true
+        })
+        .then(response => {
+            setAccountData(response.data);
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }, [username]);
 
     async function editAccount() {
         try{
@@ -38,7 +52,7 @@ function EditAccount() {
                 formData.append('newUsername', newUsername);
             }
             formData.append('newDescription', newDescription);
-            const response = await axios.post(`http://localhost:8000/api/account/${username}/change/`, formData,{
+            const response = await Axios.post(`http://localhost:8000/api/account/${username}/change/`, formData,{
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`
                     },

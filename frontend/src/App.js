@@ -16,6 +16,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/account/:username" element={<AccountPage />} />
           <Route path="/account/:username/edit" element={<AccountEditPage />} />
+          <Route path="/messages" element={<div>Messages</div>} />
           <Route path="/:username/status/:id" element={<PostScreen />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />

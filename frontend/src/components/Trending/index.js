@@ -7,7 +7,12 @@ import { useEffect, useState } from 'react';
 
 function Trending() {
     const [users, setUsers] = useState([]);
+    const [followUpdate, setFollowUpdate] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+
+
     useEffect(() => {
+        setIsLoading(true);
         Axios.get('http://localhost:8000/api/accounts/', {
         headers: {
             'Authorization': `Token ${localStorage.getItem('token')}`
@@ -15,11 +20,16 @@ function Trending() {
         withCredentials: true
     })
     .then(response => {
+        setIsLoading(false);
         setUsers(response.data);
     }).catch(error => {
         console.error('Error:', error);
     });
-    }, []);
+    }, [followUpdate]);
+
+    const handleFollowUpdate = () => {
+        setFollowUpdate(followUpdate + 1);
+    };
 
     return (
         <div className="w-full">
@@ -28,7 +38,7 @@ function Trending() {
         <Card className="max-w-sm mb-5">
         <div className="mb-4 flex items-center justify-between">
             <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">Users</h5>
-            <UserList users={users} text="Show More" title="All Users"/>
+            <UserList users={users} onClick={handleFollowUpdate} isLoading={isLoading} text="Show More" title="All Users"/>
         </div>
         <div className="flow-root">
             <ul className="divide-y divide-gray-200 dark:divide-gray-700">

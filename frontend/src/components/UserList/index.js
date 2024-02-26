@@ -3,14 +3,21 @@ import AvatarDropdown from '../AvatarDropdown';
 import React, { useState } from 'react';
 import Follow from '../Follow';
 
-function UserList( {users, text, title} ) {
+function UserList( {users, text, onClick, isLoading, title} ) {
   const [openModal, setOpenModal] = useState(false);
   const id = localStorage.getItem('id');
   const username = localStorage.getItem('username');
   const Localuser = users.find(user => user.username === username);
+
+  const handleResponse = async() => {
+    setOpenModal(true);
+    if (onClick) {
+      onClick();
+    }
+  }
   return (
     <>
-    <p className="cursor-pointer hover:underline" onClick={() => setOpenModal(true)}>{text}</p>
+    <p className="cursor-pointer hover:underline" onClick={handleResponse}>{text}</p>
     <Modal show={openModal} onClose={() => setOpenModal(false)}>
       <Modal.Header> 
         <p className="text-xl font-bold leading-none text-gray-900 dark:text-white">{title}</p>
@@ -35,7 +42,9 @@ function UserList( {users, text, title} ) {
               </div>
             </li>
           )}
-          {users.map((user, index) => (
+          {isLoading ? <p>Loading...</p>
+          :
+          users.map((user, index) => (
             user.id === Number(id) ? 
             null :
             <li key={index} className="py-3 sm:py-4">
@@ -53,7 +62,8 @@ function UserList( {users, text, title} ) {
                 <Follow username={user.username} followed={user.followers.includes(Number(id))} />
               </div>
             </li>
-          ))}
+          ))
+          } 
           </ul>
         </div>
       </Card>

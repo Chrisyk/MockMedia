@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar} from 'flowbite-react';
 import { useParams } from 'react-router-dom';
-import GetAccount from '../GetAccount';
 import Banner from '../Banner';
 import PostTemplate from '../PostTemplate';
 import Axios from 'axios';
@@ -10,11 +9,15 @@ import UserList from '../UserList';
 
 function Account() {
     const {username} = useParams();
-    const accountData = GetAccount(username);
+    const [accountData, setAccountData] = useState(null);
     const [posts, setPosts] = useState([]);
     const [Liked, setLiked] = useState(false);
-    
+    const [followUpdate, setFollowUpdate] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Gets the posts
     useEffect(() => {
+        console.log('get posts');
         Axios.get(`http://localhost:8000/api/posts/user/${username}/`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
@@ -36,9 +39,30 @@ function Account() {
         });
     }, [username]);
 
+    // Get the account data
+    useEffect(() => {
+        setIsLoading(true);
+        Axios.get(`http://localhost:8000/api/account/${username}`, {
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('token')}`
+            },
+            withCredentials: true
+        })
+        .then(response => {
+            setIsLoading(false);
+            setAccountData(response.data);
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }, [username, followUpdate]);
+
     if (!accountData) {
         return <div>Loading...</div>;
     }
+
+    const handleFollowUpdate = () => {
+        setFollowUpdate(followUpdate + 1);
+    };
 
 
     return (
@@ -48,15 +72,15 @@ function Account() {
             <Avatar img={accountData.profile_picture} className="w-32 h-0 object-cover rounded-full border-1 pb-12 pr-12 border-gray-300" size="lg" rounded bordered/>
             <div className="flex justify-between gap-4 items-center">
             <h2 className="text-2xl font-bold text-gray-800">{accountData.username}</h2>
-            <Follow username={username} followed={accountData.is_following}/>
+            <Follow username={username} onClick={handleFollowUpdate} followed={accountData.is_following}/>
 
             </div>
             <p className="text-lg text-gray-600">{accountData.description}</p>
             <div className="flex gap-4">
                 <p className="text-lg font-semibold text-gray-800">{accountData.followed.length} </p> 
-                <UserList users={accountData.followed} text="Followers" title="Followers"/>
+                <UserList users={accountData.followed} onClick={handleFollowUpdate} isLoading={isLoading} text="Followers" title="Followers"/>
                 <p className="text-lg font-semibold text-gray-800">{accountData.following.length} </p>
-                <UserList users={accountData.following} text="Following" title="Following"/>
+                <UserList users={accountData.following} onClick={handleFollowUpdate} isLoading={isLoading} text="Following" title="Following"/>
             </div>
             <div className="mt-5 border-t pt-6">
             <h2 className="text-2xl font-bold mt-2">Posts</h2>
