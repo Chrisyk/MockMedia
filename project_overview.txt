@@ -1,24 +1,15 @@
-A social media app, should have three key features:
+Features I want to include:
 
-- Login/Register page ✅
-- Home page ✅
-- Account page ✅
-
-Everything else is derived from these three
-
-Some basic models I want in my app are:
-
-- Follow System ✅
-- Post System : each post has its own url : contains comments ✅
-- Messaging System (one user could have one chatbox. One chatbox can contain multiple users)
-- Notification System
-
-Some features I want to include:
-
-- Recommendation System
-- Search funtion 
-- Following only tab
-- Comments and likes ✅
+1.  Login/Register page ✅
+2.  Home page ✅
+3.  Account page ✅
+4.  Follow system ✅
+5.  Post system ✅
+6.  Comments and likes ✅
+7.  Messaging system
+8.  Notification system
+9.  Search function
+10. API integration
 
 Important to do:
 
