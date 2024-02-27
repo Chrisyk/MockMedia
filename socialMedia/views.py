@@ -10,8 +10,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
-from .models import Profile, Post, Image
-from .serializers import ProfileSerializer
+from .models import Chat, Profile, Post, Image
+from .serializers import ProfileSerializer, ChatSerializer
 
 # API Request to login a user
 class LoginView(APIView):
@@ -60,9 +60,11 @@ class ProfileView(APIView):
         profile = get_object_or_404(Profile, user__username=username)
         following = profile.following.all()
         followed = profile.followers.all()
+        chat = profile.participant_chats.all()
         # Serialize the following and followed users
         following_serializer = ProfileSerializer(following, context={'request': request}, many=True)
         followed_serializer = ProfileSerializer(followed, context={'request': request}, many=True)
+        chat_serializer = ChatSerializer(chat, many=True, context={'request': request})
 
         # Include the serialized following and followed users in the response
         data = {
@@ -75,6 +77,7 @@ class ProfileView(APIView):
             'post_ids': [post.id for post in profile.user.post_set.all()],
             'following': following_serializer.data,
             'followed': followed_serializer.data,
+            'chats': chat_serializer.data
         }
         response = Response(data, status=status.HTTP_200_OK)
         response["Access-Control-Allow-Origin"] = "*"  # Allow CORS

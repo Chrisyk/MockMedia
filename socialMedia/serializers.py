@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Profile
+from .models import Post, Profile, Chat
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,3 +18,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         profile_picture_url = obj.picture.url if obj.picture else None
         return request.build_absolute_uri(profile_picture_url) if profile_picture_url else None
+    
+class ChatSerializer(serializers.ModelSerializer):
+    participants = ProfileSerializer(many=True)
+
+    class Meta:
+        model = Chat
+        fields = ['chat', 'date', 'participants']

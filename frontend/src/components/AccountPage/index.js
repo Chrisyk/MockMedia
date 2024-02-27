@@ -17,7 +17,6 @@ function Account() {
 
     // Gets the posts
     useEffect(() => {
-        console.log('get posts');
         Axios.get(`http://localhost:8000/api/posts/user/${username}/`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
