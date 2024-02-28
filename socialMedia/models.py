@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to="profpics", default='default.jpg')
-    description = models.TextField(blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
     banner = models.ImageField(upload_to="banners", blank=True, null=True)
     following = models.ManyToManyField('self', related_name='followers', symmetrical=False, blank=True)
 
@@ -18,7 +18,7 @@ class Image(models.Model):
     
 class Chat(models.Model):
     participants = models.ManyToManyField(Profile, related_name='participant_chats', blank=True)
-    chat = models.TextField(max_length=255, unique=True)
+    chat = models.CharField(max_length=255, unique=True)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.chat
@@ -26,7 +26,7 @@ class Chat(models.Model):
 class Message(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages')
     sender = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.CharField(max_length=255)
     images = models.ManyToManyField(Image, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
