@@ -34,7 +34,7 @@ function PostOptions({ postId }) {
     <>
     <div style={{ position: 'fixed', right: 15, top: 15}} >
         {toasts.map(toast => (
-            <Toaster key={toast.id} />
+            <Toaster key={toast.id} type="delete"/>
         ))}
     </div>
     <Dropdown inline>

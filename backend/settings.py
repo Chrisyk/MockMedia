@@ -38,7 +38,6 @@ def get_secret():
             secret = get_secret_value_response['SecretString']
         else:
             raise Exception("Couldn't retrieve the secret string")
-    print(secret)
     return json.loads(secret)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -70,15 +69,20 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'storages',
 
 ]
 
 ASGI_APPLICATION = 'backend.asgi.application'
 
+# Redice Channel Layer
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer'
-    }
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': ['redis://default:f5RalJOiPMHkcbfKDzzH6GR3f9GGdSOH@redis-18718.c326.us-east-1-3.ec2.cloud.redislabs.com:18718'],
+        },
+    },
 }
 
 MIDDLEWARE = [
@@ -87,12 +91,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-
-
 ]
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 ALLOWED_HOSTS=['*']
 
@@ -126,6 +125,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 secrets = get_secret()
 
+# Set up the AWS RDS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -139,6 +139,22 @@ DATABASES = {
         },
     }
 }
+
+# Set up the AWS S3 bucket
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+print(AWS_STORAGE_BUCKET_NAME)
+AWS_S3_REGION_NAME = 'us-east-1'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

@@ -8,6 +8,7 @@ import AccountPage from './components/AccountPage';
 import AccountEditPage from './components/EditAccount';
 import PostScreen from './components/PostScreen';
 import Messages from './components/Messages';
+import NotificationPage from './components/NotificationPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/account/:username/edit" element={<AccountEditPage />} />
           <Route path="/messages/:username" element={<Messages/>} />
           <Route path="/:username/status/:id" element={<PostScreen />} />
+          <Route path="/notifications" element={<NotificationPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

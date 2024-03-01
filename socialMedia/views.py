@@ -10,8 +10,48 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
-from .models import Chat, Profile, Post, Image
+from .models import Chat, Profile, Post, Image, Notification
 from .serializers import ProfileSerializer, ChatSerializer
+import boto3
+import json
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from django.http import JsonResponse
+
+# Invoke send a message to SNS
+def send_notification(request, username, post, token, type, topic_arn):
+    receiveUser = User.objects.get(username=username)
+    sendUser = User.objects.get(auth_token=token)
+    receiveUser.profile.notifications += 1
+    notification = Notification(receiver=receiveUser,sender=sendUser, type=type)
+    notification.post = post
+    notification.save()
+    receiveUser.save()
+    client = boto3.client('sns', region_name='us-east-1')
+    message = {
+        'recipient': username,
+        'username': sendUser.username,
+        'profile_picture': request.build_absolute_uri(sendUser.profile.picture.url) if sendUser.profile.picture else None,
+        'type': type,
+    }
+    client.publish(
+        TopicArn=topic_arn,
+        Message=json.dumps(message)
+    )
+
+def get_notification(request, username):
+    if request.method == 'POST':
+        notification_data = json.loads(request.body)
+        channel_layer = get_channel_layer()
+        print(f'notifications_{username}')
+        async_to_sync(channel_layer.group_send)(
+            f'notifications_{username}',
+            {
+                'type': 'notification.message',
+                'message': notification_data
+            }
+        )
+        return JsonResponse({'message': 'Notification sent to WebSocket client.'})
 
 # API Request to login a user
 class LoginView(APIView):
@@ -235,6 +275,7 @@ def new_reply(request, post_id):
 def like_post(request, post_id):
     added = False
     user = request.user
+    token = Token.objects.get_or_create(user=user)
     post = get_object_or_404(Post, id=post_id)
     if post is None:
         raise ValueError("Post is None")
@@ -245,6 +286,10 @@ def like_post(request, post_id):
         print("Removed Like")
         added = False
     else:
+        notificationAlreadyExists = Notification.objects.filter(sender=user, post_id=post, type="like").exists()
+        if not notificationAlreadyExists:
+            send_notification(request, post.author.username, post, token, "like","arn:aws:sns:us-east-1:427618318515:likes")
+        else: print("Notification already exists")
         post.likes.add(user)
         print("Added Like")
         added = True

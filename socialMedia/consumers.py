@@ -6,7 +6,38 @@ from socialMedia.models import Message
 from socialMedia.models import Chat
 from django.contrib.auth.models import User
 
+class NotificationConsumer(WebsocketConsumer):
+    def connect(self):
+        self.username = self.scope['url_route']['kwargs']['username']
+        self.user = User.objects.get(username=self.username)
+        self.room_group_name = f'notifications_{self.username}'
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name,
+            self.channel_name
+        )
+        print(self.room_group_name)
+        self.accept()
+        # Send all notifications in the database
+        self.send(text_data=json.dumps({
+            'totalNotifications': self.user.profile.notifications
+        }))
+    
+    def notification_message(self, event):
+        self.user.profile.notifications += 1
+        self.user.profile.save()
+        self.send(text_data=json.dumps({
+            'totalNotifications': self.user.profile.notifications,
+            'message': event['message']
+        }))
+
+    def disconnect(self, close_code):
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room_group_name,
+            self.channel_name
+        )
+
 class ChatConsumer(WebsocketConsumer):
+    
     def connect(self):
         self.username = self.scope['url_route']['kwargs']['username']
         self.token = self.scope['url_route']['kwargs']['token']
@@ -34,7 +65,6 @@ class ChatConsumer(WebsocketConsumer):
                 'message': message.content,
                 'username': message.sender.user.username,
             }))
-        
     
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -61,3 +91,5 @@ class ChatConsumer(WebsocketConsumer):
             'message': message,
             'username': username,
         }))
+    
+    

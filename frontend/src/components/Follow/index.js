@@ -27,6 +27,7 @@ function Follow( {username, onClick, followed} ) {
     }
 
     const handleResponse = async() => {
+        setFollows(!follows);
         const result = await follow();
         setFollows(result.follows);
         if (onClick) {

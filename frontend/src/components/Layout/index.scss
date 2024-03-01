@@ -33,7 +33,7 @@
     justify-items: center;
     width: 20%; // Adjust this value as needed
     background-color: #f5f5f500;
-    z-index: 3;
+    z-index: 2;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -42,7 +42,7 @@
     height: 100%;
     position: fixed;
     top: 0;
-    z-index: 2;
+    z-index: 3;
     min-height: 500px;
 
 }
