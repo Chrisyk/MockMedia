@@ -13,11 +13,17 @@ function Post() {
     };
 
     const handleFileChange = (event) => {
+      if (event.target.files.length > 6) {
+        alert('You can only upload a maximum of 6 files');
+        event.target.value = '';  // Clear the selected files
+      } else {
         setFiles(event.target.files);
+      }
     };
 
     const handleSubmit = async () => {
         console.log('submitting post...');
+        setOpenModal(false);
         const formData = new FormData();
         formData.append('text', text);
         for (let i = 0; i < files.length; i++) {
@@ -37,8 +43,6 @@ function Post() {
         } catch (error) {
             console.error('Error:', error);
         }
-
-        setOpenModal(false);
         window.location.reload();
     };
 

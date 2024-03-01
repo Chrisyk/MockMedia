@@ -92,4 +92,10 @@ class ChatConsumer(WebsocketConsumer):
             'username': username,
         }))
     
+    def disconnect(self, close_code):
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room_group_name,
+            self.channel_name
+        )
+    
     

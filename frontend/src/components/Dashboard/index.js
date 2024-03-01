@@ -33,6 +33,7 @@ const Dashboard = () => {
       socket.onmessage = (event) => {
           const data = JSON.parse(event.data);
           setTotalNotifications(data.totalNotifications);
+          console.log('ALL NOTIFS: ',data);
           if (data && data.message) {
             const newNotification = data.message;
             setNotificationData(oldNotifications => [...oldNotifications, newNotification]);

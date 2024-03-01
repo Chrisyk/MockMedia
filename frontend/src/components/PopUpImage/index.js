@@ -5,6 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 const customStyles = {
     overlay: {
       zIndex: 1000,
+      backgroundColor: 'rgba(209, 209, 209, 0.5)'
     },
     content: {
       top: '50%',
@@ -29,18 +30,19 @@ const customStyles = {
   
     return (
       <>
-        <img src={image} alt="Post" className="rounded-lg w-full h-full object-cover" onClick={() => setOpenModal(true)}/>
+        <img src={image} alt="Post" className="rounded-lg w-full h-full max-h-96 object-cover" onClick={() => setOpenModal(true)}/>
         <Modal
           isOpen={openModal}
           onRequestClose={() => setOpenModal(false)}
           style={customStyles}
+
           contentLabel="Image Modal"
         >
           <div className="text-center">
             <button onClick={() => setOpenModal(false)} className="absolute top-8 right-7 text-white bg-gray-200/[.06] rounded-full p-2 hover:bg-gray-200/[0.7] transition duration-200">
                 <CloseIcon/>
             </button>
-            <img src={image} alt="Post" className="rounded-lg object-contain" style={{maxHeight: '80vh', maxWidth: '90vh'}}/>
+            <img src={image} alt="Post" className="rounded-lg object-contain" style={{maxHeight: '98vh', maxWidth: '98vh'}}/>
           </div>
         </Modal>
       </>

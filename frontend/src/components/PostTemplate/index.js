@@ -22,7 +22,7 @@ function PostTemplate ({ posts, Likes}) {
                 {post.author === username ? <PostOptions postId={post.id}/> : null}
                 </div>
                 <a href={`/${post.author}/status/${post.id}`}>
-                <p className="mt-2 pb-2 pt-2">{post.content}</p>
+                <p className="mt-2 pb-2 pt-2 whitespace-pre-wrap">{post.content}</p>
                 {post.images.length > 1 ? 
                 <div className="grid grid-cols-2 gap-2 max-w-3xl" onClick={(event) => event.preventDefault()}>
                     {post.images.map((image, imageIndex) => (
@@ -42,7 +42,7 @@ function PostTemplate ({ posts, Likes}) {
                 }
                 
                 </a>
-                <div className="flex gap-4 mt-4">
+                <div className="flex gap-4 mt-1">
                     <HeartPost postId={post.id} Liked={Likes[post.id]?.isLiked} likesCount={Likes[post.id]?.totalLikes} />
                     <Reply postId={post.id} numComments={post.comments.length}/>
                 </div>

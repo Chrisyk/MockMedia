@@ -11,7 +11,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from .models import Chat, Profile, Post, Image, Notification
-from .serializers import ProfileSerializer, ChatSerializer
+from .serializers import ProfileSerializer, ChatSerializer, NotificationSerializer
 import boto3
 import json
 from channels.layers import get_channel_layer
@@ -52,6 +52,20 @@ def get_notification(request, username):
             }
         )
         return JsonResponse({'message': 'Notification sent to WebSocket client.'})
+
+# Gets all notifications
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_all_notifications(request):
+    profile = request.user.profile
+    profile.notifications = 0
+    profile.save()
+    allNotifications = Notification.objects.filter(receiver=request.user).order_by('-date')
+    serializer = NotificationSerializer(allNotifications, context={'request': request}, many=True)
+    
+    response = Response(serializer.data, status=status.HTTP_200_OK)
+    response["Access-Control-Allow-Origin"] = "*"
+    return response
 
 # API Request to login a user
 class LoginView(APIView):
