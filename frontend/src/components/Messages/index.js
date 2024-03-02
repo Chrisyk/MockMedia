@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { TextInput, Button } from 'flowbite-react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import  Axios from 'axios';
 
 
 function Messages() {
@@ -12,6 +13,7 @@ function Messages() {
     const [socket, setSocket] = useState(null);
     const [message, setMessage] = useState("");
     const [chat, setChat] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,13 +21,29 @@ function Messages() {
         const ws = new WebSocket(`ws://localhost:8000/ws/socket-server/${username}/${token}/`);
         setSocket(ws);
     },[username, token, localUsername, navigate]);
+    
+    useEffect(() => {
+        Axios.get(`http://localhost:8000/api/chats/${username}/`, {
+            headers: {
+                'Authorization': `Token ${token}`
+            },
+            withCredentials: true
+        }).then(response => {
+            console.log('Data from database',response.data.messages);
+            setChat(response.data.messages);
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+        setIsLoading(false);
+    }, [username, token]); 
 
     useEffect(() => {
         if (!socket) return;
-    
+        
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            setChat((prevChat) => [...prevChat, data]);
+            console.log(data);
+            setChat((prevChat) => [...prevChat, data.message]);
         };
     }, [socket]);
 
@@ -50,6 +68,10 @@ function Messages() {
         window.history.back();
     };
 
+    if (isLoading || !chat){
+        return <div>Loading...</div>
+    }
+
     return (
         <div className='flex flex-col h-screen pb-5 mr-10'>
         <div className="flex pl-5 gap-4 items-start mt-5 border-b">
@@ -57,8 +79,9 @@ function Messages() {
         <h1 className="text-2xl font-bold">{username}</h1>
         </div>
         <div className='overflow-auto mb-auto'>
-            {chat.map((messageObject, index) => (
-            <p className="pl-5 pt-2" key={index}>{messageObject.username}: {messageObject.message}</p>
+            {
+            chat.map((messageObject, index) => (
+            <p className="pl-5 pt-2" key={index}>{messageObject.sender.username}: {messageObject.content}</p>
             ))}
         </div>
         <div className='w-full pr-5 pl-5'>

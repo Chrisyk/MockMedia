@@ -34,7 +34,9 @@ from socialMedia.views import (
     get_all_users,
     follow_user,
     get_notification,
-    get_all_notifications
+    get_all_notifications,
+    get_all_chats,
+    get_all_messages
 )
 
 urlpatterns = [
@@ -46,6 +48,8 @@ urlpatterns = [
     path('api/account/<str:username>/', ProfileView.as_view(), name='get_user'),
     path('api/account/<str:username>/change/', change_profile, name='change_profile'),
     path('api/account/<str:username>/follow/', follow_user, name='follow_user'),
+    path('api/chats/', get_all_chats, name='get_all_chats'),
+    path('api/chats/<str:username>/', get_all_messages, name='get_all_messages'),
     path('api/posts/', get_all_posts, name='get_all_posts'),
     path('api/posts/user/<str:username>/', get_user_posts, name='get_user_post'),
     path('api/posts/<int:post_id>/', get_post, name='get_post'),

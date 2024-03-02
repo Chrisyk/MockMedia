@@ -10,8 +10,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
-from .models import Chat, Profile, Post, Image, Notification
-from .serializers import ProfileSerializer, ChatSerializer, NotificationSerializer
+from .models import Chat, Profile, Post, Image, Notification, ChatNotification
+from .serializers import ProfileSerializer, ChatSerializer, SimpleChatSerializer, NotificationSerializer, ChatNotificationSerializer
 import boto3
 import json
 from channels.layers import get_channel_layer
@@ -28,11 +28,13 @@ def send_notification(request, username, post, token, type, topic_arn):
     notification.save()
     receiveUser.save()
     client = boto3.client('sns', region_name='us-east-1')
+    print ("sender: ", sendUser.username, "receiver: ", receiveUser.username, "type: ", type, "topic_arn: ", topic_arn)
     message = {
         'recipient': username,
         'username': sendUser.username,
         'profile_picture': request.build_absolute_uri(sendUser.profile.picture.url) if sendUser.profile.picture else None,
         'type': type,
+        'message': None,
     }
     client.publish(
         TopicArn=topic_arn,
@@ -43,7 +45,7 @@ def get_notification(request, username):
     if request.method == 'POST':
         notification_data = json.loads(request.body)
         channel_layer = get_channel_layer()
-        print(f'notifications_{username}')
+        print(notification_data)
         async_to_sync(channel_layer.group_send)(
             f'notifications_{username}',
             {
@@ -114,11 +116,11 @@ class ProfileView(APIView):
         profile = get_object_or_404(Profile, user__username=username)
         following = profile.following.all()
         followed = profile.followers.all()
-        chat = profile.participant_chats.all()
+        chatNotification = ChatNotification.objects.filter(user=request.user)
         # Serialize the following and followed users
         following_serializer = ProfileSerializer(following, context={'request': request}, many=True)
         followed_serializer = ProfileSerializer(followed, context={'request': request}, many=True)
-        chat_serializer = ChatSerializer(chat, many=True, context={'request': request})
+        chat_notification_serializer = ChatNotificationSerializer(chatNotification, many=True, context={'request': request})
 
         # Include the serialized following and followed users in the response
         data = {
@@ -126,16 +128,39 @@ class ProfileView(APIView):
             'profile_picture': request.build_absolute_uri(profile.picture.url) if profile.picture else None,
             'banner': request.build_absolute_uri(profile.banner.url) if profile.banner else '',
             'email': profile.user.email, 
+            'chat_notifications': chat_notification_serializer.data,
             'is_following': profile.followers.filter(id=request.user.id).exists(),
             'description': profile.description if profile.description else '',
             'post_ids': [post.id for post in profile.user.post_set.all()],
             'following': following_serializer.data,
             'followed': followed_serializer.data,
-            'chats': chat_serializer.data
         }
         response = Response(data, status=status.HTTP_200_OK)
         response["Access-Control-Allow-Origin"] = "*"  # Allow CORS
         return Response(data, status=status.HTTP_200_OK)
+
+# Gets all chats
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_all_chats(request):
+    profile = request.user.profile
+    chat = profile.participant_chats.all()
+    chat_serializer = SimpleChatSerializer(chat, many=True, context={'request': request})
+    response = Response(chat_serializer.data, status=status.HTTP_200_OK)
+    response["Access-Control-Allow-Origin"] = "*"
+    return response
+
+# Get all messages from a channel
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_all_messages(request, username):
+    usernames = sorted([request.user.username, username])
+    room_group_name = f'chat_{usernames[0]}_{usernames[1]}'
+    chat = get_object_or_404(Chat, chat=room_group_name)
+    chat_serializer = ChatSerializer(chat)
+    response = Response(chat_serializer.data, status=status.HTTP_200_OK)
+    response["Access-Control-Allow-Origin"] = "*"
+    return response
 
 # Gets all users
 @api_view(["GET"])
@@ -271,9 +296,11 @@ def new_post(request):
 def new_reply(request, post_id):
     user = request.user
     content = request.data.get('text')
+    token = Token.objects.get_or_create(user=user)
     parent = get_object_or_404(Post, id=post_id)
     post = Post(author=user, content=content, parent=parent)
     post.save()
+    send_notification(request, parent.author.username, post, token, "comment","arn:aws:sns:us-east-1:427618318515:comments")
     files = request.FILES.getlist('files[]')
     print("Number of files received:", len(files))
     for image_file in files:
@@ -311,7 +338,7 @@ def like_post(request, post_id):
     post.save()
     return Response({'added': added, 'total_likes': post.likes.count()}, status=status.HTTP_200_OK)
 
-# Follows a user
+# Follows or Unfollows a user
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def follow_user(request, username):
@@ -320,6 +347,7 @@ def follow_user(request, username):
     followed_user = User.objects.filter(username=username).first()
     request_profile = Profile.objects.filter(user=request_user).first()
     followed_profile = Profile.objects.filter(user=followed_user).first()
+    token = Token.objects.get_or_create(user=request_user)
 
     if followed_profile.followers.filter(id=request_user.id).exists():
         followed_profile.followers.remove(request_profile)
@@ -329,6 +357,10 @@ def follow_user(request, username):
     else:
         followed_profile.followers.add(request_profile)
         request_profile.following.add(followed_profile)
+        notificationAlreadyExists = Notification.objects.filter(sender=request_user, post_id=None, type="follow").exists()
+        if not notificationAlreadyExists:
+            send_notification(request, followed_user.username, None, token, "follow","arn:aws:sns:us-east-1:427618318515:follows")
+        else: print("Notification already exists")
         follows = True
         print("Followed")
     request_profile.save()

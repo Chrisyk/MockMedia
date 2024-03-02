@@ -17,12 +17,13 @@ const Dashboard = () => {
   const username = localStorage.getItem('username');
   const token = localStorage.getItem('token');
   const [messagesUpdate, setMessagesUpdate] = useState(0);
-  const [accountData, setAccountData] = useState(null);
+  const [chatData, setChatData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [socket, setSocket] = useState(null);
-  const [notificationData, setNotificationData] = useState([]);
+  const [popNotificationData, setPopNotificationData] = useState([]);
   const [loadingNotificationData, setLoadingNotificationData] = useState(true);
-  const [totalNotifications, setTotalNotifications] = useState(0);
+  const [notificationData, setNotificationData] = useState([]);
+
   useEffect(() => {
     const ws = new WebSocket(`ws://localhost:8000/ws/notifications/${username}/`);
     setSocket(ws);
@@ -32,21 +33,21 @@ const Dashboard = () => {
       if (!socket) return;
       socket.onmessage = (event) => {
           const data = JSON.parse(event.data);
-          setTotalNotifications(data.totalNotifications);
-          console.log('ALL NOTIFS: ',data);
+          setNotificationData(data);
+          console.log("POP UP: ", data)
           if (data && data.message) {
             const newNotification = data.message;
-            setNotificationData(oldNotifications => [...oldNotifications, newNotification]);
+            setPopNotificationData(oldNotifications => [...oldNotifications, newNotification]);
           }
           setLoadingNotificationData(false);
       };
   }, [socket]);
 
-  // Get the account data
+  // Get the all chats
   useEffect(() => {
     setIsLoading(true);
     if (username) {
-    Axios.get(`http://localhost:8000/api/account/${username}`, {
+    Axios.get(`http://localhost:8000/api/chats`, {
         headers: {
             'Authorization': `Token ${localStorage.getItem('token')}`
         },
@@ -54,7 +55,7 @@ const Dashboard = () => {
     })
     .then(response => {
         setIsLoading(false);
-        setAccountData(response.data);
+        setChatData(response.data);
         
     }).catch(error => {
         console.error('Error:', error);
@@ -66,21 +67,8 @@ const Dashboard = () => {
       setMessagesUpdate(messagesUpdate + 1);
     };
 
-  if (loadingNotificationData === true) {
+  if (loadingNotificationData === true && isLoading === true) {
     return (
-      <>
-      <div style={{ position: 'fixed', right: 15, top: 15 }}>
-        {notificationData ? (
-          notificationData.map((notification, index) =>
-          <Toaster
-            key={index}
-            type={notification.type}
-            img={notification.profile_picture}
-            username={notification.username}
-          />
-            ))
-        : null}
-      </div>
         <Sidebar aria-label="Default sidebar example">
           <Sidebar.Logo href="/" img={Logo} imgAlt="Logo">
             MockMedia
@@ -93,7 +81,12 @@ const Dashboard = () => {
               <Sidebar.Item href={`/account/${username}`} icon={PersonIcon}>
                 Account
               </Sidebar.Item>
-              <AllMessages chats={accountData ? accountData.chats : []} onClick={handleUpdate} isLoading={isLoading} />
+              <AllMessages
+               chats={chatData ? chatData : []} 
+               onClick={handleUpdate}
+               totalChatNotifications={notificationData.totalMessages} // All chats notifications
+               chatNotifications={notificationData.chatNotifications ? notificationData.chatNotifications : []} // Individual chat notifications
+               />
               <Sidebar.Item href="/notifications" className="cursor-pointer" icon={NotificationsIcon}>
                 Notifications
               </Sidebar.Item>
@@ -106,20 +99,17 @@ const Dashboard = () => {
             </Sidebar.ItemGroup>
           </Sidebar.Items>
         </Sidebar>
-        </>
     )
   }
 
   return (
   <>
 <div style={{ position: 'fixed', right: 15, top: 15 }}>
-  {notificationData ? (
-    notificationData.map((notification, index) =>
+  {popNotificationData ? (
+    popNotificationData.map((notification, index) =>
     <Toaster
       key={index}
-      type={notification.type}
-      img={notification.profile_picture}
-      username={notification.username}
+      notification={notification}
     />
       ))
   : null}
@@ -136,8 +126,18 @@ const Dashboard = () => {
         <Sidebar.Item href={`/account/${username}`} icon={PersonIcon}>
           Account
         </Sidebar.Item>
-        <AllMessages chats={accountData ? accountData.chats : []} onClick={handleUpdate} isLoading={isLoading} />
-        <Sidebar.Item href="/notifications" label={totalNotifications === 0 ? null : totalNotifications} className="cursor-pointer" icon={NotificationsIcon} labelColor="green">
+        <AllMessages
+          chats={chatData ? chatData : []} 
+          onClick={handleUpdate}
+          isLoading={isLoading}
+          totalChatNotifications={notificationData.totalMessages} 
+          chatNotifications={notificationData.chatNotifications ? notificationData.chatNotifications : []}/>
+        <Sidebar.Item 
+        href="/notifications" 
+        label={notificationData.totalNotifications === 0 ? null : notificationData.totalNotifications} 
+        className="cursor-pointer" 
+        icon={NotificationsIcon} 
+        labelColor="green">
           Notifications
         </Sidebar.Item>
         <Post />

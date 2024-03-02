@@ -8,6 +8,7 @@ class Profile(models.Model):
     banner = models.ImageField(upload_to="banners", blank=True, null=True)
     following = models.ManyToManyField('self', related_name='followers', symmetrical=False, blank=True)
     notifications = models.IntegerField(default=0)
+    messages = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.username
@@ -37,23 +38,27 @@ class Notification(models.Model):
     def __str__(self):
         return self.type
     
-class Chat(models.Model):
-    participants = models.ManyToManyField(Profile, related_name='participant_chats', blank=True)
-    chat = models.CharField(max_length=255, unique=True)
-    date = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return self.chat
-    
 class Message(models.Model):
-    chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages')
     sender = models.ForeignKey(Profile, on_delete=models.CASCADE)
     content = models.CharField(max_length=255)
     images = models.ManyToManyField(Image, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-
     def __str__(self):
         return self.content
 
+class Chat(models.Model):
+    participants = models.ManyToManyField(Profile, related_name='participant_chats', blank=True)
+    activeParticipants = models.ManyToManyField(Profile, related_name='active_participant_chats', blank=True)
+    chat = models.CharField(max_length=255, unique=True)
+    messages = models.ManyToManyField(Message, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.chat
+
+class ChatNotification(models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    count = models.IntegerField(default=0)
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -3,18 +3,19 @@ import { useState } from 'react';
 import EmailIcon from '@mui/icons-material/Email';
 import AvatarDropdown from '../AvatarDropdown';
 
-function AllMessages( { chats, isLoading, onClick }) {
+function AllMessages( { chats, onClick, isLoading, totalChatNotifications, chatNotifications } ) {
     const [openModal, setOpenModal] = useState(false);
-
     const handleResponse = async() => {
         setOpenModal(true);
         if (onClick) {
             onClick();
         }
     }
+
     return (
     <>
-        <Sidebar.Item className="cursor-pointer" onClick={handleResponse} icon={EmailIcon} labelColor="dark">
+        <Sidebar.Item className="cursor-pointer" onClick={handleResponse} icon={EmailIcon} 
+        label={totalChatNotifications > 0 ? totalChatNotifications : null} labelColor="green">
           Mail
         </Sidebar.Item>
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
@@ -25,8 +26,10 @@ function AllMessages( { chats, isLoading, onClick }) {
             </div>
         </Modal.Header>
         <Modal.Body>
-            {chats.map((chat, index) => (
+            {isLoading ? <p>Loading...</p> :
+            chats.map((chat, index) => (
                 <div className="flex mb-5" key={index}>
+                <div className="flex w-20">
                 <AvatarGroup>
                     {chat.participants.map((participant, index2) => (
                         <div key={index2}>
@@ -37,12 +40,20 @@ function AllMessages( { chats, isLoading, onClick }) {
 
                     ))}
                 </AvatarGroup>
-                <div className="flex ml-5 mt-1 hover:underline cursor-pointer">
+                </div>
+                
                     {chat.participants.map((participant, index2) => (
                         participant.username === localStorage.getItem('username') ? null :
-                        <a className="text-lg font-bold mr-2" href={`/messages/${participant.username}`} key={index2}>{participant.username}</a>
+                        <div key={chat.id} className="flex justify-between w-full ml-5">
+                        <div className="flex mt-1 hover:underline cursor-pointer">
+                            <a className="text-lg font-bold mr-2" href={`/messages/${participant.username}`}>{participant.username}</a>
+                        </div>
+
+                        <p className='mt-2'>Notifications: {
+                            chatNotifications.find(chatNotifications => chatNotifications.chat === chat.id)?.count || 0
+                        }</p>
+                        </div>
                     ))}
-                </div>
                 </div>
             ))
             }

@@ -1,10 +1,15 @@
 from rest_framework import serializers
-from .models import Post, Profile, Chat, Notification
+from .models import Post, Profile, Chat, Notification, ChatNotification, Message
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__' 
+
+class ChatNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatNotification
+        fields = ['user', 'chat', 'count']
 
 class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
@@ -44,10 +49,22 @@ class NotificationSerializer(serializers.ModelSerializer):
             return None
     def get_date(self, obj):
         return obj.date.strftime("%b %d, %y, %I:%M %p")
+    
+class MessageSerializer(serializers.ModelSerializer):
+    sender = ProfileSerializer()
+    class Meta:
+        model = Message
+        fields = '__all__'
 
 class ChatSerializer(serializers.ModelSerializer):
     participants = ProfileSerializer(many=True)
-
+    messages = MessageSerializer(many=True, read_only=True)
     class Meta:
         model = Chat
-        fields = ['chat', 'date', 'participants']
+        fields = ['id', 'chat','messages', 'date', 'participants']
+
+class SimpleChatSerializer(serializers.ModelSerializer):
+    participants = ProfileSerializer(many=True)
+    class Meta:
+        model = Chat
+        fields = ['id', 'chat', 'date', 'participants']
