@@ -23,49 +23,49 @@ function Toaster( { notification } ) {
                 <Toast>
                     {notification.type === "like" ?
                         <>
-                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
+                        <div className="inline-flex shrink-0 items-center justify-center rounded-lg">
                         <Avatar
                             img={notification.profile_picture}
-                            size="xs"
+                            size="md"
                             rounded
                         />
                         </div>
-                        <div className="ml-3 text-sm font-normal">{notification.username} liked your post!</div>
+                        <div className="ml-5 mr-10 text-sm font-normal">{notification.username} liked your post!</div>
                         </>
                     : 
                     notification.type === "comment" ?
                     <>
-                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
+                        <div className="inline-flex shrink-0 items-center justify-center rounded-lg">
                         <Avatar
                             img={notification.profile_picture}
-                            size="xs"
+                            size="md"
                             rounded
                         />
                         </div>
-                        <div className="ml-3 text-sm font-normal">{notification.username} commented on your post!</div>
+                        <div className="ml-5 mr-10 text-sm font-normal">{notification.username} commented on your post!</div>
                         </>
                     :
                     notification.type === "message" ?
                     <>
-                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
+                        <div className="inline-flex shrink-0 items-center justify-center rounded-lg">
                         <Avatar
                             img={notification.profile_picture}
-                            size="xs"
+                            size="md"
                             rounded
                         />
                         </div>
-                        <div className="ml-3 text-sm font-normal">{notification.username}: {notification.message} </div>
+                        <div className="ml-5 mr-10 text-sm font-normal">{notification.username}: {notification.message} </div>
                     </>
                     :
                         <>
-                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
+                        <div className="inline-flex shrink-0 items-center justify-center rounded-lg">
                         <Avatar
                             img={notification.profile_picture}
-                            size="xs"
+                            size="md"
                             rounded
                         />
                         </div>
-                        <div className="ml-3 text-sm font-normal">{notification.username} followed you!</div>
+                        <div className="ml-5 mr-10 text-sm font-normal">{notification.username} followed you!</div>
                         </>
                     }
                     

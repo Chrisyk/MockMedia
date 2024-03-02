@@ -11,15 +11,19 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv
 from pathlib import Path
 import boto3
 from botocore.exceptions import BotoCoreError, ClientError
 import json
 
+# Load environment variables
+load_dotenv()
+
 # Get secret password
 def get_secret():
-    secret_name = "rds!db-efd2a367-d2c4-4d89-a4c5-b1a3bb402a06"
-    region_name = "us-east-1"
+    secret_name = os.getenv('SECRET_NAME')
+    region_name = os.getenv('REGION_NAME')
 
     session = boto3.session.Session()
     client = session.client(
@@ -48,7 +52,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-mvu%p3bq9yg_tnv5bfi-q$8_iryw(v691%n!u361ex@9s=m4)^'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -80,7 +84,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': ['redis://default:f5RalJOiPMHkcbfKDzzH6GR3f9GGdSOH@redis-18718.c326.us-east-1-3.ec2.cloud.redislabs.com:18718'],
+            'hosts': [os.getenv('REDIS_URL')],
         },
     },
 }
@@ -132,8 +136,8 @@ DATABASES = {
         'NAME': 'social',
         'USER': secrets['username'],
         'PASSWORD': secrets['password'],
-        'HOST': 'social.cls4yqasef8j.us-east-1.rds.amazonaws.com',
-        'PORT': '3306',
+        'HOST': os.getenv('RDS_HOST'),
+        'PORT': os.getenv('RDS_PORT'),
         'OPTIONS': {
             'sql_mode': 'STRICT_ALL_TABLES',
         },
@@ -142,8 +146,7 @@ DATABASES = {
 
 # Set up the AWS S3 bucket
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-print(AWS_STORAGE_BUCKET_NAME)
-AWS_S3_REGION_NAME = 'us-east-1'
+AWS_S3_REGION_NAME = os.getenv('REGION_NAME')
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
 
 AWS_S3_OBJECT_PARAMETERS = {

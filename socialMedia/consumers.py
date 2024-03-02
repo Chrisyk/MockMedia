@@ -7,7 +7,10 @@ from socialMedia.models import Chat, ChatNotification
 from django.contrib.auth.models import User
 from socialMedia.serializers import ChatNotificationSerializer, MessageSerializer
 import boto3
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
         self.username = self.scope['url_route']['kwargs']['username']
@@ -62,12 +65,9 @@ class ChatConsumer(WebsocketConsumer):
         self.sender_notification, createdNotification = ChatNotification.objects.get_or_create(chat=self.chat_archive, user=self.sender_user)
         self.receiver_notification, createdNotification = ChatNotification.objects.get_or_create(chat=self.chat_archive, user=self.receiver_user)
         if createdChat:
-            print(f"Created chat: {self.room_group_name}")
             self.chat_archive.participants.add(self.sender_user.profile)
             self.chat_archive.participants.add(self.receiver_user.profile)
             self.chat_archive.save()
-        else :
-            print(f"Chat already exists: {self.room_group_name}")
         # Adds the connected user to active participants
         self.chat_archive.activeParticipants.add(self.sender_user.profile)
         async_to_sync(self.channel_layer.group_add)(
@@ -79,7 +79,6 @@ class ChatConsumer(WebsocketConsumer):
         if self.sender_user.profile.messages < 0:
             self.sender_user.profile.messages = 0
         self.sender_notification.count = 0 # Resets the count of sender notifications of this chat only
-        print(f"Resetting sender's notification count for this chat to: {self.receiver_notification.count}")
         self.sender_user.profile.save()
         self.sender_notification.save()
         # Send all messages in the chat
@@ -93,11 +92,10 @@ class ChatConsumer(WebsocketConsumer):
         self.chat_archive.save()
         message_serializer = MessageSerializer(newMessage) # Gets message ready to be sent to the client
         if not self.chat_archive.activeParticipants.filter(id=self.receiver_user.id).exists():
-            print(f"Adding to receiver's notifications: {self.receiver_notification.count}")
             self.receiver_notification.count += 1 # Adds to receiver's notifications of this channel
             self.receiver_notification.save()
             session = boto3.Session(
-                region_name='us-east-1',
+                region_name=os.getenv('REGION_NAME'),
             )
             sns = session.client('sns')
             messageContent = {
@@ -109,7 +107,7 @@ class ChatConsumer(WebsocketConsumer):
             }
             messageContent = json.dumps(messageContent)
             sns.publish(
-            TopicArn="arn:aws:sns:us-east-1:427618318515:message",
+            TopicArn=os.getenv('MESSAGE_TOPIC_ARN'),
             Message=messageContent,
             )
         async_to_sync(self.channel_layer.group_send)(

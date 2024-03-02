@@ -17,7 +17,10 @@ import json
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.http import JsonResponse
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 # Invoke send a message to SNS
 def send_notification(request, username, post, token, type, topic_arn):
     receiveUser = User.objects.get(username=username)
@@ -27,7 +30,7 @@ def send_notification(request, username, post, token, type, topic_arn):
     notification.post = post
     notification.save()
     receiveUser.save()
-    client = boto3.client('sns', region_name='us-east-1')
+    client = boto3.client('sns', region_name=os.getenv('REGION_NAME'))
     print ("sender: ", sendUser.username, "receiver: ", receiveUser.username, "type: ", type, "topic_arn: ", topic_arn)
     message = {
         'recipient': username,
@@ -300,7 +303,7 @@ def new_reply(request, post_id):
     parent = get_object_or_404(Post, id=post_id)
     post = Post(author=user, content=content, parent=parent)
     post.save()
-    send_notification(request, parent.author.username, post, token, "comment","arn:aws:sns:us-east-1:427618318515:comments")
+    send_notification(request, parent.author.username, post, token, "comment", os.getenv('COMMENT_TOPIC_ARN'))
     files = request.FILES.getlist('files[]')
     print("Number of files received:", len(files))
     for image_file in files:
@@ -329,7 +332,7 @@ def like_post(request, post_id):
     else:
         notificationAlreadyExists = Notification.objects.filter(sender=user, post_id=post, type="like").exists()
         if not notificationAlreadyExists:
-            send_notification(request, post.author.username, post, token, "like","arn:aws:sns:us-east-1:427618318515:likes")
+            send_notification(request, post.author.username, post, token, "like", os.getenv('LIKE_TOPIC_ARN'))
         else: print("Notification already exists")
         post.likes.add(user)
         print("Added Like")
@@ -359,7 +362,7 @@ def follow_user(request, username):
         request_profile.following.add(followed_profile)
         notificationAlreadyExists = Notification.objects.filter(sender=request_user, post_id=None, type="follow").exists()
         if not notificationAlreadyExists:
-            send_notification(request, followed_user.username, None, token, "follow","arn:aws:sns:us-east-1:427618318515:follows")
+            send_notification(request, followed_user.username, None, token, "follow", os.getenv('FOLLOW_TOPIC_ARN'))
         else: print("Notification already exists")
         follows = True
         print("Followed")
