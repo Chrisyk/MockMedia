@@ -122,7 +122,7 @@ const LoginPage = () => {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="mailto:chrisko2003@gmail.com" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>

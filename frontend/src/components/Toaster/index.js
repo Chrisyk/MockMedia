@@ -54,7 +54,9 @@ function Toaster( { notification } ) {
                             rounded
                         />
                         </div>
-                        <div className="ml-5 mr-10 text-sm font-normal">{notification.username}: {notification.message} </div>
+                        <div className="flex ml-4 w-52 text-sm font-normal">{notification.username}
+                        <p className="truncate ...">: {notification.message}</p>
+                        </div>
                     </>
                     :
                         <>
@@ -65,7 +67,7 @@ function Toaster( { notification } ) {
                             rounded
                         />
                         </div>
-                        <div className="ml-5 mr-10 text-sm font-normal">{notification.username} followed you!</div>
+                        <div className="ml-4 mr-10 text-sm font-normal">{notification.username} followed you!</div>
                         </>
                     }
                     

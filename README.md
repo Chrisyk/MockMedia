@@ -11,8 +11,8 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 - Following other users ✅️
 - Real-time messaging system ✅️
 - Notification system ✅
-- Search Functionality
-- API Integration
+- Search Functionality ✅
+- API Integration ✅
 
 ## Technologies Used
 

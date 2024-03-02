@@ -21,7 +21,8 @@ from backend import settings
 from socialMedia.views import (
     LoginView, 
     RegisterView,
-    ProfileView, 
+    ProfileView,
+    SearchView,
     logout_view, 
     new_post, 
     get_all_posts,
@@ -36,7 +37,8 @@ from socialMedia.views import (
     get_notification,
     get_all_notifications,
     get_all_chats,
-    get_all_messages
+    get_all_messages,
+    get_weather
 )
 
 urlpatterns = [
@@ -46,6 +48,7 @@ urlpatterns = [
     path('api/register/', RegisterView.as_view(), name='register'),
     path('api/accounts/', get_all_users, name='get_all_users'),
     path('api/account/<str:username>/', ProfileView.as_view(), name='get_user'),
+    path('api/search/', SearchView.as_view(), name='search'),
     path('api/account/<str:username>/change/', change_profile, name='change_profile'),
     path('api/account/<str:username>/follow/', follow_user, name='follow_user'),
     path('api/chats/', get_all_chats, name='get_all_chats'),
@@ -59,4 +62,5 @@ urlpatterns = [
     path('api/newpost/<int:post_id>/', new_reply, name='new_reply'),
     path('api/notifications/', get_all_notifications, name='get_all_notifications'),
     path('api/notifications/<str:username>/', get_notification, name='get_notification'),
+    path('api/get_weather/', get_weather, name='get_weather'),
 ]

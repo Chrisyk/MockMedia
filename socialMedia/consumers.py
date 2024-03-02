@@ -6,9 +6,11 @@ from socialMedia.models import Message
 from socialMedia.models import Chat, ChatNotification
 from django.contrib.auth.models import User
 from socialMedia.serializers import ChatNotificationSerializer, MessageSerializer
+from django.core.cache import cache
 import boto3
 from dotenv import load_dotenv
 import os
+from channels.layers import get_channel_layer
 
 load_dotenv()
 class NotificationConsumer(WebsocketConsumer):
@@ -75,6 +77,7 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
+        self.heartbeat()
         self.sender_user.profile.messages -= self.sender_notification.count # Removes the notification of this channel from total messages
         if self.sender_user.profile.messages < 0:
             self.sender_user.profile.messages = 0
@@ -82,6 +85,26 @@ class ChatConsumer(WebsocketConsumer):
         self.sender_user.profile.save()
         self.sender_notification.save()
         # Send all messages in the chat
+    
+    def heartbeat(self):
+        cache.set(f'heartbeat_{self.room_group_name}_{self.sender_user.username}', True, 30)
+        # Schedule the next heartbeat check
+        channel_layer = get_channel_layer()
+        print("Checking hearbeat: ", f'heartbeat_{self.room_group_name}_{self.sender_user.username}')
+        async_to_sync(channel_layer.send)(self.room_group_name, {
+            'type': 'heartbeat.check'
+        })
+
+    def heartbeat_check(self, event):
+        # If the cache key has expired, the client has disconnected
+        if not cache.get(f'heartbeat_{self.room_group_name}_{self.sender_user.username}'):
+            self.disconnect()
+
+        # Schedule the next heartbeat check
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.send)(self.room_group_name, {
+            'type': 'heartbeat.check'
+        }, delay=30)
     
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -100,7 +123,7 @@ class ChatConsumer(WebsocketConsumer):
             sns = session.client('sns')
             messageContent = {
                 'recipient': self.receiver_user.username,
-                'username': self.username,
+                'username': self.sender_user.username,
                 'profile_picture': self.sender_user.profile.picture.url if self.sender_user.profile.picture else '',
                 'type' : 'message',
                 'message': message
@@ -117,7 +140,6 @@ class ChatConsumer(WebsocketConsumer):
                 'message': message_serializer.data
             }
         )
-        
     
     def chat_message(self, event):
         message = event['message']

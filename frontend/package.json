@@ -16,13 +16,16 @@
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.7.2",
     "js-cookie": "^3.0.5",
+    "loadash": "^1.0.0",
     "postcss": "^8.4.35",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-loading-skeleton": "^3.4.0",
     "react-modal": "^3.16.1",
+    "react-open-weather": "^1.3.2",
     "react-router-dom": "^6.22.1",
     "react-scripts": "^5.0.1",
+    "react-select": "^5.8.0",
     "sass": "^1.71.0",
     "socket.io-client": "^4.7.4",
     "tailwindcss": "^3.4.1",
@@ -51,5 +54,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.24.0",
+    "@babel/preset-react": "^7.23.3"
   }
 }

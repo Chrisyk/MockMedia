@@ -19,6 +19,7 @@ from asgiref.sync import async_to_sync
 from django.http import JsonResponse
 from dotenv import load_dotenv
 import os
+import requests
 
 load_dotenv()
 # Invoke send a message to SNS
@@ -106,6 +107,8 @@ class RegisterView(APIView):
             return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
         if User.objects.filter(email=email).exists():
             return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
+        if len(password) < 8:
+            return Response({'error': 'Password must be at least 8 characters long'}, status=status.HTTP_400_BAD_REQUEST)
         user = User.objects.create_user(username=username, email=email, password=password)
         profile = Profile(user=user)
         profile.save()
@@ -379,3 +382,25 @@ def delete_post(request, post_id):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
     post.delete()
     return Response(status=status.HTTP_200_OK)
+
+class SearchView(APIView):
+    def get(self, request):
+        query = request.GET.get('q', '')
+        if query is not '':
+            results = User.objects.filter(username__istartswith=query)
+            profiles = [user.profile for user in results]
+            data = ProfileSerializer(profiles, context={'request': request}, many=True).data
+            return JsonResponse(data, safe=False)
+        else:
+            return JsonResponse([], safe=False)
+
+# Get weather data
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_weather(request):
+    latitude = request.GET.get('latitude')
+    longitude = request.GET.get('longitude')
+    print("Latitude: ",latitude,"Longitude: ", longitude)
+    response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={os.getenv("WEATHER_API_KEY")}')
+    data = response.json()
+    return JsonResponse(data, safe=False)

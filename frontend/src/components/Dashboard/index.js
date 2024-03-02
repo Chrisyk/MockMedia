@@ -34,10 +34,12 @@ const Dashboard = () => {
       socket.onmessage = (event) => {
           const data = JSON.parse(event.data);
           setNotificationData(data);
-          console.log("POP UP: ", data)
+          console.log(data);
           if (data && data.message) {
             const newNotification = data.message;
             setPopNotificationData(oldNotifications => [...oldNotifications, newNotification]);
+            let audio = new Audio('https://mockmedia.s3.amazonaws.com/notification.mp3');
+            audio.play();
           }
           setLoadingNotificationData(false);
       };

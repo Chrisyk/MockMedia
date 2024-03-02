@@ -6,8 +6,8 @@ Features I want to include:
 4.  Follow system ✅
 5.  Post system ✅
 6.  Comments and likes ✅
-7.  Messaging system
-8.  Notification system
+7.  Messaging system ✅
+8.  Notification system ✅
 9.  Search function
 10. API integration
 

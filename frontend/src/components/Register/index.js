@@ -18,7 +18,7 @@ const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    const [setError] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -42,9 +42,23 @@ const LoginPage = () => {
                 navigate('/login');
             };
         } catch (error) {
-            console.error(error.response.data);
-            setError('Error creating account. Please try again.');
-        }
+          if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              setError(error.response.data.error);  // Access the error message string
+          } else if (error.request) {
+              // The request was made but no response was received
+              console.log(error.request);
+              setError('No response from server');
+          } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log('Error', error.message);
+              setError('Request setup failed');
+          }
+      }
     };
 
     function Copyright(props) {
@@ -79,6 +93,9 @@ const LoginPage = () => {
           </Avatar>
           <Typography component="h1" variant="h5">
             Register
+          </Typography>
+          <Typography component="h5" style={{ color: 'red', fontSize: 'smaller' }}>
+            {error}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
