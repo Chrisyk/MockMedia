@@ -1,6 +1,6 @@
 # MockMedia
 
-MockMedia is a three-tier web application leveraging React, Django, and MySQL. It ultilizes AWS micro-services, such as Amazon Relational Database, Amazon Simple Notification Service, AWS Lambda, and Amazon Simple Storage Service to provide a completely decoupled architecture. This mock social media platform showcases my full-stack and cloud developer proficiency.
+MockMedia is a three-tier web application leveraging React, Django, and MySQL. It ultilizes AWS micro-services, such as Amazon Relational Database, Amazon Simple Notification Service, AWS Lambda, and Amazon Simple Storage Service to provide a completely decoupled architecture.
 
 ## Features
 
@@ -10,7 +10,7 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 - Customizing user profile ✅️
 - Following other users ✅️
 - Real-time messaging system ✅️
-- Notification system
+- Notification system ✅
 - Search Functionality
 - API Integration
 
