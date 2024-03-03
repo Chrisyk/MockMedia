@@ -9,7 +9,7 @@ function Post() {
     const [files, setFiles] = useState([]);
 
     const handleTextChange = (event) => {
-        setText(event.target.value.substring(0, 10));
+        setText(event.target.value);
     };
 
     const handleFileChange = (event) => {
