@@ -38,7 +38,8 @@ from socialMedia.views import (
     get_all_notifications,
     get_all_chats,
     get_all_messages,
-    get_weather
+    get_weather,
+    delete_all_notifications
 )
 
 urlpatterns = [
@@ -62,5 +63,6 @@ urlpatterns = [
     path('api/newpost/<int:post_id>/', new_reply, name='new_reply'),
     path('api/notifications/', get_all_notifications, name='get_all_notifications'),
     path('api/notifications/<str:username>/', get_notification, name='get_notification'),
+    path('api/notifications/delete', delete_all_notifications, name='delete_all_notifications'),
     path('api/get_weather/', get_weather, name='get_weather'),
 ]

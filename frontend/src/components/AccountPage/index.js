@@ -6,8 +6,10 @@ import PostTemplate from '../PostTemplate';
 import Axios from 'axios';
 import Follow from '../Follow';
 import UserList from '../UserList';
+import ReactModal from 'react-modal';
 
 function Account() {
+    if (process.env.NODE_ENV !== 'test') ReactModal.setAppElement('#root');
     const {username} = useParams();
     const [accountData, setAccountData] = useState(null);
     const [posts, setPosts] = useState([]);

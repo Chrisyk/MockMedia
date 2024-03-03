@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useMatch } from 'react-router-dom'
 import Dashboard from '../Dashboard'
 import Trending from '../Trending'
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,8 @@ const Layout = () => {
         }
       }, [token, navigate]);
 
+    const match = useMatch('messages/*');
+
     return token ? (
     <div className="App">
         <div className="app-bar"> 
@@ -22,9 +24,11 @@ const Layout = () => {
         <div className="page">
             <Outlet />
         </div>
+        {!match && 
         <div className="trending">
-          <Trending/>
+        <Trending />
         </div>
+        }
       </div>
     ) : null;
     

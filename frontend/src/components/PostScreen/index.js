@@ -25,6 +25,7 @@ function PostScreen() {
         })
         .then(response => {
             setPostData(response.data);
+            console.log(response.data);
             const newCommentLikes = {};
             newCommentLikes[response.data.id] = {
                 isLiked: response.data.liked,

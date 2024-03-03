@@ -22,15 +22,13 @@ const customStyles = {
       border: 'none',
     },
   };
-  
-  Modal.setAppElement('#root');
-  
+    
   const PopUpImage = ({ image }) => {
     const [openModal, setOpenModal] = useState(false);
   
     return (
       <>
-        <img src={image} alt="Post" className="rounded-lg w-full h-full max-h-96 object-cover" onClick={() => setOpenModal(true)}/>
+        <img src={image} alt="Post" className="rounded-lg w-full h-full object-cover" onClick={() => setOpenModal(true)}/>
         <Modal
           isOpen={openModal}
           onRequestClose={() => setOpenModal(false)}

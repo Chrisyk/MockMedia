@@ -50,25 +50,32 @@ function Trending() {
     };
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            let latitude = position.coords.latitude;
-            let longitude = position.coords.longitude;
-    
-            console.log(latitude);
-            fetch(`http://localhost:8000/api/get_weather/?latitude=${latitude}&longitude=${longitude}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${localStorage.getItem('token')}`
-                },
-            }).then(response => response.json())
-            .then(data => {
-                console.log(data);
-                setWeather(data);
-                setIsLoadingWeather(false);
-            }).catch(error => {
-                console.error('Error:', error);
+        const cachedWeather = localStorage.getItem('weather');
+        if (cachedWeather) {
+            setWeather(JSON.parse(cachedWeather));
+            setIsLoadingWeather(false);
+        } else {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                let latitude = position.coords.latitude;
+                let longitude = position.coords.longitude;
+        
+                console.log(latitude);
+                fetch(`http://localhost:8000/api/get_weather/?latitude=${latitude}&longitude=${longitude}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${localStorage.getItem('token')}`
+                    },
+                }).then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    localStorage.setItem('weather', JSON.stringify(data));
+                    setWeather(data);
+                    setIsLoadingWeather(false);
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
             });
-        });
+        }
     }, []);
 
     const debouncedSearch = debounce(handleSearchUpdate, 300);
@@ -86,7 +93,7 @@ function Trending() {
         setIsFocused(true);
     };
     return (
-        <div className="w-full">
+    <div className="width-full">
         <div>
             <TextInput id="search" type="search" rightIcon={SearchIcon} placeholder="Search" onChange={debouncedSearch} onBlur={handleBlur} onFocus={handleFocus}/>
             {isFocused ?
@@ -130,9 +137,8 @@ function Trending() {
         {isLoadingWeather ? 
         null
         :
-            <div className="flex flex-col items-center justify-center p-4 mb-5 max-w bg-blue-500 text-white rounded">
-            <h2 className="text-2xl font-bold mb-2">{weather.name}</h2>
-            <h3 className="text-xl">{weather.weather[0].main}</h3>
+            <div className="bg-gradient-to-t from-blue-300 to-blue-500 flex flex-col items-center justify-center p-4 mb-5 max-w text-white rounded">
+            <h2 className="text-2xl mb-2" style={{ fontFamily: 'Roboto' }}>{weather.name}</h2>
             <img
                 src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
                 alt={weather.weather[0].description}
@@ -146,20 +152,21 @@ function Trending() {
             </div>
         }
         <Card
-            className="max-w"
+            className="max-w mb-5"
             imgAlt="Meaningful alt text for an image that is not purely decorative"
-            imgSrc="https://source.unsplash.com/random/600x300"
+            imgSrc="https://mockmedia.s3.amazonaws.com/cardImage.jpg"
+            href="https://christopher-ko.com/"
             >
             <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 Portfolio
             </h5>
             <p className="font-normal text-gray-700 dark:text-gray-400">
-                This is an ad. Go visit my website at <a href="http://www.christopher-ko.com" className="text-blue-500">christopher-ko.com</a> for more information.
+                My name is Christopher and I'm a web developer. I'm passionate about creating beautiful and functional websites.
             </p>
         </Card>
         </div>
         
-        </div>
+    </div>
         
     )
 }

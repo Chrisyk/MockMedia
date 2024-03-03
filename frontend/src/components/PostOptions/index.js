@@ -38,7 +38,6 @@ function PostOptions({ postId }) {
         ))}
     </div>
     <Dropdown inline>
-      <Dropdown.Item>edit</Dropdown.Item>
       <Dropdown.Item onClick={deletePost}>delete</Dropdown.Item>
     </Dropdown>
     </>

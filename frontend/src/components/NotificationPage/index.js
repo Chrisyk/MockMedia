@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import Axios from 'axios';
 import AvatarDropdown from '../AvatarDropdown';
+import { Button } from 'flowbite-react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import PersonIcon from '@mui/icons-material/Person';
@@ -26,13 +27,26 @@ function NotificationPage () {
         });
     }, []);
 
+    function clearNotifications() {
+        Axios.delete('http://localhost:8000/api/notifications/delete', {
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('token')}`
+            },
+            withCredentials: true
+        })
+        .then(() => {
+            setNotifications([]);
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
     return (
         <div className="relative h-full min-h-screen w-full bg-gray-100">
         <div className="w-11/12 rounded-xl bg-white p-5 ml-10 mt-5 shadow-md">
-            <div className="flex justify-between gap-4 items-center">
-            <div className="flex gap-4 items-center">
-                <h2 className="text-2xl font-bold pb-5">Notifications</h2>
-            </div>
+            <div className="flex justify-between w-full gap-4 items-center pb-5">
+            <h2 className="text-2xl font-bold">Notifications</h2>
+            <Button size="xs" outline gradientDuoTone="tealToLime" onClick={clearNotifications}>clear all</Button>
             </div>
             {!isLoading ?
                 <div>

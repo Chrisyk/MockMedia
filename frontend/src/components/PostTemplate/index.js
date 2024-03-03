@@ -24,7 +24,7 @@ function PostTemplate ({ posts, Likes}) {
                 <a href={`/${post.author}/status/${post.id}`}>
                 <p className="mt-2 pb-2 pt-2 whitespace-pre-wrap">{post.content}</p>
                 {post.images.length > 1 ? 
-                <div className="grid grid-cols-2 gap-2 max-w-3xl" onClick={(event) => event.preventDefault()}>
+                <div className="grid grid-cols-2 pr-20 gap-2" onClick={(event) => event.preventDefault()}>
                     {post.images.map((image, imageIndex) => (
                     <div key={imageIndex} className="grid gap-4">
                             <PopUpImage image={image}/>
@@ -32,7 +32,7 @@ function PostTemplate ({ posts, Likes}) {
                         ))}
                     </div>
                     : 
-                    <div className="grid grid-cols-1 gap-2 max-w-2xl" onClick={(event) => event.preventDefault()}>
+                    <div className="grid grid-cols-1 pr-56 gap-2" onClick={(event) => event.preventDefault()}>
                     {post.images.map((image, imageIndex) => (
                         <div key={imageIndex} className="grid gap-4">
                         <PopUpImage image={image}/>
@@ -42,7 +42,7 @@ function PostTemplate ({ posts, Likes}) {
                 }
                 
                 </a>
-                <div className="flex gap-4 mt-1">
+                <div className="flex gap-4 mt-3">
                     <HeartPost postId={post.id} Liked={Likes[post.id]?.isLiked} likesCount={Likes[post.id]?.totalLikes} />
                     <Reply postId={post.id} numComments={post.comments.length}/>
                 </div>

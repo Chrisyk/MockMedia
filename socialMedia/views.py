@@ -45,6 +45,7 @@ def send_notification(request, username, post, token, type, topic_arn):
         Message=json.dumps(message)
     )
 
+# Sends notification from lambda to WebSocket client
 def get_notification(request, username):
     if request.method == 'POST':
         notification_data = json.loads(request.body)
@@ -57,7 +58,7 @@ def get_notification(request, username):
                 'message': notification_data
             }
         )
-        return JsonResponse({'message': 'Notification sent to WebSocket client.'})
+        return JsonResponse({'message': 'Notification sent to WebSocket client.'}, status=status.HTTP_200_OK)
 
 # Gets all notifications
 @api_view(["GET"])
@@ -72,6 +73,18 @@ def get_all_notifications(request):
     response = Response(serializer.data, status=status.HTTP_200_OK)
     response["Access-Control-Allow-Origin"] = "*"
     return response
+
+# Deletes all notifications
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_all_notifications(request):
+    profile = request.user.profile
+    profile.notifications = 0
+    profile.save()
+    allNotifications = Notification.objects.filter(receiver=request.user)
+    allNotifications.delete()
+    print("Deleted all notifications")
+    return Response(status=status.HTTP_200_OK)
 
 # API Request to login a user
 class LoginView(APIView):
@@ -386,7 +399,7 @@ def delete_post(request, post_id):
 class SearchView(APIView):
     def get(self, request):
         query = request.GET.get('q', '')
-        if query is not '':
+        if query != '':
             results = User.objects.filter(username__istartswith=query)
             profiles = [user.profile for user in results]
             data = ProfileSerializer(profiles, context={'request': request}, many=True).data
