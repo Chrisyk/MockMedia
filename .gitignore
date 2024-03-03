@@ -1,7 +1,9 @@
-node_modules/
-./frontend/node_modules/
-db.sqlite3
-.env
-socialMedia/__pycache__/
-socialMedia/migrations/
-backend/__pycache__/
+/frontend/frontend/node_modules/
+/frontend/node_modules/
+/frontend/package-lock.json
+/frontend/package.json
+/frontend/frontend/package-lock.json
+/frontend/frontend/package.json
+/backend/socialMedia/__pycache__/
+/backend/socialMedia/migrations/
+/backend/backend/__pycache__/
