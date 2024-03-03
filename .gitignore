@@ -7,3 +7,4 @@
 /backend/socialMedia/__pycache__/
 /backend/socialMedia/migrations/
 /backend/backend/__pycache__/
+.env
