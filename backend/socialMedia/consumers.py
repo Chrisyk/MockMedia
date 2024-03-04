@@ -1,20 +1,17 @@
 from channels.generic.websocket import WebsocketConsumer
 import json
 from asgiref.sync import async_to_sync
-from rest_framework.authtoken.models import Token
-from socialMedia.models import Message
-from socialMedia.models import Chat, ChatNotification
-from django.contrib.auth.models import User
-from socialMedia.serializers import ChatNotificationSerializer, MessageSerializer
-from django.core.cache import cache
+from channels.layers import get_channel_layer
 import boto3
 from dotenv import load_dotenv
 import os
-from channels.layers import get_channel_layer
 
 load_dotenv()
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
+        from socialMedia.models import ChatNotification
+        from django.contrib.auth.models import User
+        from socialMedia.serializers import ChatNotificationSerializer
         self.username = self.scope['url_route']['kwargs']['username']
         self.user = User.objects.get(username=self.username)
         self.room_group_name = f'notifications_{self.username}'
@@ -33,6 +30,8 @@ class NotificationConsumer(WebsocketConsumer):
         }))
     
     def notification_message(self, event):
+        from socialMedia.models import ChatNotification
+        from socialMedia.serializers import ChatNotificationSerializer
         chatNotification = ChatNotification.objects.filter(user=self.user)
         chat_notification_serializer = ChatNotificationSerializer(chatNotification, many=True)
         if event['message']['type'] == 'message':
@@ -55,6 +54,9 @@ class NotificationConsumer(WebsocketConsumer):
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
+        from rest_framework.authtoken.models import Token
+        from socialMedia.models import Chat, ChatNotification
+        from django.contrib.auth.models import User
         self.username = self.scope['url_route']['kwargs']['username']
         self.token = self.scope['url_route']['kwargs']['token']
         self.sender_user = Token.objects.get(key=self.token).user
@@ -85,6 +87,7 @@ class ChatConsumer(WebsocketConsumer):
         # Send all messages in the chat
     
     def heartbeat(self):
+        from django.core.cache import cache
         cache.set(f'heartbeat_{self.room_group_name}_{self.sender_user.username}', True, 30)
         # Schedule the next heartbeat check
         channel_layer = get_channel_layer()
@@ -93,6 +96,7 @@ class ChatConsumer(WebsocketConsumer):
         })
 
     def heartbeat_check(self, event):
+        from django.core.cache import cache
         # If the cache key has expired, the client has disconnected
         if not cache.get(f'heartbeat_{self.room_group_name}_{self.sender_user.username}'):
             self.disconnect()
@@ -104,6 +108,8 @@ class ChatConsumer(WebsocketConsumer):
         }, delay=30)
     
     def receive(self, text_data):
+        from socialMedia.serializers import MessageSerializer
+        from socialMedia.models import Message
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         newMessage = Message(content=message, sender=self.sender_user.profile) # Create a new message instance
