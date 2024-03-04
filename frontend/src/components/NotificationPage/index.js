@@ -6,7 +6,7 @@ import { Button } from 'flowbite-react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import PersonIcon from '@mui/icons-material/Person';
-import backendBaseUrl from '../../config';
+import { backendBaseUrl } from '../../config';
 import './index.scss'
 
 function NotificationPage () {

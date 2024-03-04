@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Banner from '../Banner';
-import backendBaseUrl from '../../config';
+import { backendBaseUrl } from '../../config';
 import Loading from '../Loading';
 
 import './index.scss';

@@ -4,7 +4,7 @@ import UserList from '../UserList';
 import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import { debounce } from 'lodash';
-import backendBaseUrl from '../../config';
+import { backendBaseUrl } from '../../config';
 
 function Trending() {
     const [users, setUsers] = useState([]);

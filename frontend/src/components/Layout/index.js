@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Button } from 'flowbite-react';
 import MenuIcon from '@mui/icons-material/Menu';
-import backendBaseUrl from '../../config';
+import { websocketBaseURL } from '../../config';
 import Toaster from '../Toaster';
 import './index.scss'
 
@@ -31,7 +31,7 @@ const Layout = () => {
     }, []);
 
     useEffect(() => {
-      const ws = new WebSocket(`ws://${backendBaseUrl}/ws/notifications/${username}/`);
+      const ws = new WebSocket(`ws://${websocketBaseURL}/ws/notifications/${username}/`);
       setSocket(ws);
     },[username, token]);
   

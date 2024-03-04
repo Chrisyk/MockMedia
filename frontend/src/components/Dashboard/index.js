@@ -9,7 +9,7 @@ import Post from '../Post'
 import AllMessages from '../AllMessages';
 import Axios from 'axios';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import backendBaseUrl from '../../config';
+import { backendBaseUrl } from '../../config';
 import "./index.scss";
 
 

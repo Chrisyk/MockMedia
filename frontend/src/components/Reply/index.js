@@ -3,7 +3,7 @@ import { Button, Modal, Textarea, FileInput } from 'flowbite-react';
 import { useState } from 'react';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import axios from 'axios';
-import backendBaseUrl from '../../config';
+import { backendBaseUrl } from '../../config';
 
 function Post( { postId, numComments}) {
     const [openModal, setOpenModal] = useState(false);

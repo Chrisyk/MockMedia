@@ -7,7 +7,7 @@ import Axios from 'axios';
 import Follow from '../Follow';
 import UserList from '../UserList';
 import ReactModal from 'react-modal';
-import backendBaseUrl from '../../config';
+import { backendBaseUrl } from '../../config';
 import Loading from '../Loading';
 import './index.scss';
 

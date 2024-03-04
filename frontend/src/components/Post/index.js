@@ -2,7 +2,7 @@ import { Button, Modal, Textarea, FileInput } from 'flowbite-react';
 import { useState } from 'react';
 import CreateIcon from '@mui/icons-material/Create';
 import axios from 'axios';
-import backendBaseUrl from '../../config';
+import { backendBaseUrl } from '../../config';
 
 function Post() {
     const [openModal, setOpenModal] = useState(false);

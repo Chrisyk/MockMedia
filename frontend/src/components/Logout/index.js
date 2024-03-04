@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import backendBaseUrl from '../../config';
+import { backendBaseUrl } from '../../config';
 
 // This could be moved to a separate file
 const useAuth = () => {

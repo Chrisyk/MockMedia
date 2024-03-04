@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PostTemplate from '../PostTemplate';
 import Axios from 'axios';
-import backendBaseUrl from '../../config';
+import { backendBaseUrl } from '../../config';
 import './index.scss';
 import Loading from '../Loading';
 
