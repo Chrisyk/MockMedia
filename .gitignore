@@ -4,6 +4,7 @@
 /frontend/package.json
 /frontend/frontend/package-lock.json
 /frontend/frontend/package.json
+/frontend/build/
 /backend/socialMedia/__pycache__/
 /backend/socialMedia/migrations/
 /backend/backend/__pycache__/
