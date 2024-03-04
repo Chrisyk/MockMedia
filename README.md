@@ -40,7 +40,7 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 
 ## Usage
 
-1. Clone the git repository on your local machine
+1. Clone the git repository to your local machine
 
 2. Make a virtual environment for both backend and frontend.(recommended)
 
@@ -52,7 +52,7 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 
 5. Install the latest version of Node.js (use nvm for easy instalation).
 
-6. Install all of the node modules with the command ```npm install```
+6. Install all of the node modules with the command ```npm install``` or ```yarn install``` if using yarn.
 
 7. Make sure the client can run ultilizing ```npm start```
 
@@ -78,4 +78,5 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 
 15. In the frontend folder, run ```npm start``` and open to the localhost link to your browser
 
-16. In the backend folder, run ```python manage.py runserver```
+16. Create a separate terminal and
+in the backend folder, run ```python manage.py runserver```
