@@ -203,10 +203,7 @@ def change_profile(request, username):
         profile.banner = request.data.get('newBanner')
     if request.data.get('newUsername'):
         user.username = request.data.get('newUsername')
-    if request.data.get('description') == '':
-        profile.description = ''
-    else:
-        profile.description = request.data.get('newDescription')
+    profile.description = request.data.get('newDescription')
     profile.save()
     user.save()
     return Response(status=status.HTTP_200_OK)
