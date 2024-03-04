@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { TextInput, Button } from 'flowbite-react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import  Axios from 'axios';
-import { backendBaseUrl } from '../../config';
+import backendBaseUrl from '../../config';
 
 
 function Messages() {

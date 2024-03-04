@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Button } from 'flowbite-react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PostTemplate from '../PostTemplate';
-import { backendBaseUrl } from '../../config';
+import backendBaseUrl from '../../config';
 
 
 function PostScreen() {

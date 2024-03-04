@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Dropdown } from 'flowbite-react';
 import axios from 'axios';
 import Toaster from '../Toaster';
-import { backendBaseUrl } from '../../config';
+import backendBaseUrl from '../../config';
 
 function PostOptions({ postId }) {
 
