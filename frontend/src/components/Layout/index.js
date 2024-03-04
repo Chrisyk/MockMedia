@@ -63,9 +63,11 @@ const Layout = () => {
             notification={notification}/>
           )): null}
       </div>
+      {!match &&
       <Button onClick={() => setSidebarVisible(!isSidebarVisible)} gradientDuoTone="tealToLime" size="xs" className="ultility-button rounded-full w-14 h-14 right-5 bottom-5 fixed z-10">
         <MenuIcon/>
       </Button>
+      }
       <div className={`app-bar ${isSidebarVisible || 'hidden lg:block'} fixed z-10`}> 
       <Dashboard loadingNotificationData={loadingNotificationData} notificationData={notificationData}/>
       </div>

@@ -30,7 +30,6 @@ function Messages() {
             },
             withCredentials: true
         }).then(response => {
-            console.log('Data from database',response.data.messages);
             setChat(response.data.messages);
         }).catch(error => {
             console.error('Error:', error);
@@ -50,13 +49,15 @@ function Messages() {
 
     const sendMessage = (e) => {
         e.preventDefault();
-        if (socket) {
+        if (socket.readyState === WebSocket.OPEN) {
             console.log('sending message: ', message);
             socket.send(JSON.stringify({
                 type: "message",
                 message: message,
                 username: localUsername,
             }));
+        } else {
+            console.error('WebSocket is not open');
         }
         setMessage("");
     };
