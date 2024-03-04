@@ -5,12 +5,12 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 ## Features
 
 - Account creation ✅️
-- Creating posts ✅️
-- Liking and commenting on posts ✅️
-- Customizing user profile ✅️
-- Following other users ✅️
+- Post creation ✅️
+- Likes and comments ✅️
+- User profile customization ✅️
+- Follow system ✅️
 - Real-time messaging system ✅️
-- Notification system ✅
+- Real-time notification system ✅
 - Search Functionality ✅
 - API Integration ✅
 
@@ -37,6 +37,7 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 - Amazon Simple Notification Service (SNS)
 - Amazon Simple Storage Service (S3)
 - Amazon Elastic Compute Service (EC2)
+- Amazon Route 53
 
 ## Usage
 
