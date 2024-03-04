@@ -1,0 +1,11 @@
+boto3
+python-dotenv
+channels
+channels-redis
+requests
+djangorestframework
+corsheaders
+django-cors-headers
+django-storages
+mysqlclient
+pillow

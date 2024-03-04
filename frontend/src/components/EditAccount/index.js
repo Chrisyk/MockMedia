@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Banner from '../Banner';
+import backendBaseUrl from '../../config';
 
 
 import './index.scss';
@@ -26,7 +27,7 @@ function EditAccount() {
 
     // Get the account data
     useEffect(() => {
-        Axios.get(`http://localhost:8000/api/account/${username}`, {
+        Axios.get(`http://${backendBaseUrl}/api/account/${username}`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },
@@ -52,7 +53,7 @@ function EditAccount() {
                 formData.append('newUsername', newUsername);
             }
             formData.append('newDescription', newDescription);
-            const response = await Axios.post(`http://localhost:8000/api/account/${username}/change/`, formData,{
+            const response = await Axios.post(`http://${backendBaseUrl}/api/account/${username}/change/`, formData,{
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`
                     },

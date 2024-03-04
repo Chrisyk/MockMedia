@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Dropdown } from 'flowbite-react';
 import axios from 'axios';
 import Toaster from '../Toaster';
+import { backendBaseUrl } from '../../config';
 
 function PostOptions({ postId }) {
 
@@ -10,7 +11,7 @@ function PostOptions({ postId }) {
 
   function deletePost() {
     const token = localStorage.getItem('token');
-    axios.delete(`http://localhost:8000/api/posts/${postId}/delete/`, {
+    axios.delete(`http://${backendBaseUrl}/api/posts/${postId}/delete/`, {
       headers: {
         'Authorization': `Token ${token}`
       },

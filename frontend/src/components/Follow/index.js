@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'flowbite-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { backendBaseUrl } from '../../config';
 
 function Follow( {username, onClick, followed} ) {
     const usernameLocal = localStorage.getItem('username');
@@ -14,7 +15,7 @@ function Follow( {username, onClick, followed} ) {
 
     async function follow() {
         try{
-            const response = await axios.post(`http://localhost:8000/api/account/${username}/follow/`, {}, {
+            const response = await axios.post(`http://${backendBaseUrl}/api/account/${username}/follow/`, {}, {
                 headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
                 },

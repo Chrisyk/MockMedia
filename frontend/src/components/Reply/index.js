@@ -3,6 +3,7 @@ import { Button, Modal, Textarea, FileInput } from 'flowbite-react';
 import { useState } from 'react';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import axios from 'axios';
+import backendBaseUrl from '../../config';
 
 function Post( { postId, numComments}) {
     const [openModal, setOpenModal] = useState(false);
@@ -27,7 +28,7 @@ function Post( { postId, numComments}) {
         }
 
         try {
-          const response = await axios.post(`http://localhost:8000/api/newpost/${postId}/`, formData, {
+          const response = await axios.post(`http://${backendBaseUrl}/api/newpost/${postId}/`, formData, {
               headers: {
                   'Authorization': `Token ${localStorage.getItem('token')}`,
               },

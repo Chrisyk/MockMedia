@@ -10,6 +10,7 @@ import AllMessages from '../AllMessages';
 import Axios from 'axios';
 import Toaster from '../Toaster';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import backendBaseUrl from '../../config';
 
 
 const Dashboard = () => {
@@ -25,7 +26,7 @@ const Dashboard = () => {
   const [notificationData, setNotificationData] = useState([]);
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://localhost:8000/ws/notifications/${username}/`);
+    const ws = new WebSocket(`ws://${backendBaseUrl}/ws/notifications/${username}/`);
     setSocket(ws);
   },[username, token]);
 
@@ -49,7 +50,7 @@ const Dashboard = () => {
   useEffect(() => {
     setIsLoading(true);
     if (username) {
-    Axios.get(`http://localhost:8000/api/chats`, {
+    Axios.get(`http://${backendBaseUrl}/api/chats`, {
         headers: {
             'Authorization': `Token ${localStorage.getItem('token')}`
         },

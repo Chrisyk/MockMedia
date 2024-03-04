@@ -7,6 +7,7 @@ import Axios from 'axios';
 import Follow from '../Follow';
 import UserList from '../UserList';
 import ReactModal from 'react-modal';
+import backendBaseUrl from '../../config';
 
 function Account() {
     if (process.env.NODE_ENV !== 'test') ReactModal.setAppElement('#root');
@@ -19,7 +20,7 @@ function Account() {
 
     // Gets the posts
     useEffect(() => {
-        Axios.get(`http://localhost:8000/api/posts/user/${username}/`, {
+        Axios.get(`http://${backendBaseUrl}/api/posts/user/${username}/`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },
@@ -43,7 +44,7 @@ function Account() {
     // Get the account data
     useEffect(() => {
         setIsLoading(true);
-        Axios.get(`http://localhost:8000/api/account/${username}`, {
+        Axios.get(`http://${backendBaseUrl}/api/account/${username}`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },

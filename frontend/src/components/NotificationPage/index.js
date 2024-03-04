@@ -6,6 +6,7 @@ import { Button } from 'flowbite-react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import PersonIcon from '@mui/icons-material/Person';
+import backendBaseUrl from '../../config';
 
 function NotificationPage () {
     const [notifications, setNotifications] = useState([]);
@@ -13,7 +14,7 @@ function NotificationPage () {
     const localUser = localStorage.getItem('username');
 
     useEffect(() => {
-        Axios.get('http://localhost:8000/api/notifications/', {
+        Axios.get(`http://${backendBaseUrl}/api/notifications/`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },
@@ -28,7 +29,7 @@ function NotificationPage () {
     }, []);
 
     function clearNotifications() {
-        Axios.delete('http://localhost:8000/api/notifications/delete', {
+        Axios.delete(`http://${backendBaseUrl}/api/notifications/delete`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },

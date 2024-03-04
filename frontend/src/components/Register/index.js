@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { backendBaseUrl } from '../../config';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
@@ -28,7 +29,7 @@ const LoginPage = () => {
             // Get the CSRF token from the cookie
             // Prevents Cross Site Request Forgery attacks
             const csrfToken = Cookies.get('csrftoken');
-            const response = await axios.post('http://localhost:8000/api/register/', {
+            const response = await axios.post(`http://${backendBaseUrl}/api/register/`, {
                 username,
                 email,
                 password,

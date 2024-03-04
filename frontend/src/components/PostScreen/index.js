@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Button } from 'flowbite-react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PostTemplate from '../PostTemplate';
+import { backendBaseUrl } from '../../config';
 
 
 function PostScreen() {
@@ -17,7 +18,7 @@ function PostScreen() {
 
     const getPost = useCallback(async () => {
         const token = localStorage.getItem('token');
-        axios.get(`http://localhost:8000/api/posts/${id}`, {
+        axios.get(`http://${backendBaseUrl}/api/posts/${id}`, {
             headers: {
                 'Authorization': `Token ${token}`
             },
@@ -52,7 +53,7 @@ function PostScreen() {
         if (postLoaded && postData && postData.comments) {
             const token = localStorage.getItem('token');
             Promise.all(postData.comments.map(commentId => 
-                axios.get(`http://localhost:8000/api/posts/${commentId}`, {
+                axios.get(`http://${backendBaseUrl}/api/posts/${commentId}`, {
                     headers: {
                         'Authorization': `Token ${token}`
                     },

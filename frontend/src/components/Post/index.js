@@ -2,6 +2,7 @@ import { Button, Modal, Textarea, FileInput } from 'flowbite-react';
 import { useState } from 'react';
 import CreateIcon from '@mui/icons-material/Create';
 import axios from 'axios';
+import backendBaseUrl from '../../config';
 
 function Post() {
     const [openModal, setOpenModal] = useState(false);
@@ -32,7 +33,7 @@ function Post() {
         }
 
         try {
-          const response = await axios.post('http://localhost:8000/api/newpost/', formData, {
+          const response = await axios.post(`http://${backendBaseUrl}/api/newpost/`, formData, {
               headers: {
                   'Authorization': `Token ${localStorage.getItem('token')}`,
               },

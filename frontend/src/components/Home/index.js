@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PostTemplate from '../PostTemplate';
 import Axios from 'axios';
+import backendBaseUrl from '../../config';
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
@@ -8,7 +9,7 @@ const Home = () => {
     const [isLoading, setIsLoading] = useState(true);
     
     useEffect(() => {
-            Axios.get('http://localhost:8000/api/posts/', {
+            Axios.get(`http://${backendBaseUrl}/api/posts/`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },

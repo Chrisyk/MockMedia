@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { TextInput, Button } from 'flowbite-react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import  Axios from 'axios';
+import { backendBaseUrl } from '../../config';
 
 
 function Messages() {
@@ -18,12 +19,12 @@ function Messages() {
 
     useEffect(() => {
         if (username === localUsername) navigate('/');
-        const ws = new WebSocket(`ws://localhost:8000/ws/socket-server/${username}/${token}/`);
+        const ws = new WebSocket(`ws://${backendBaseUrl}/ws/socket-server/${username}/${token}/`);
         setSocket(ws);
     },[username, token, localUsername, navigate]);
     
     useEffect(() => {
-        Axios.get(`http://localhost:8000/api/chats/${username}/`, {
+        Axios.get(`http://${backendBaseUrl}/api/chats/${username}/`, {
             headers: {
                 'Authorization': `Token ${token}`
             },

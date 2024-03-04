@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { backendBaseUrl } from '../../config';
 
 // This could be moved to a separate file
 const useAuth = () => {
@@ -8,7 +9,7 @@ const useAuth = () => {
 
   const logout = async () => {
     try {
-      await axios.get('http://localhost:8000/api/logout/');
+      await axios.get(`http://${backendBaseUrl}/api/logout/`);
       localStorage.removeItem('token');
       navigate('/login');
     } catch (error) {

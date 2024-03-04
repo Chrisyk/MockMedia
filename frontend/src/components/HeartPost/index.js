@@ -10,7 +10,7 @@ function HeartButton({ postId, Liked, likesCount }) {
 
     async function HeartPost(postId) {
         try{
-            const response = await axios.post(`http://localhost:8000/api/posts/${postId}/like/`, {}, {
+            const response = await axios.post(`http://${backendBaseUrl}/api/posts/${postId}/like/`, {}, {
                 headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
                 },
