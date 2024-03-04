@@ -40,7 +40,7 @@ const customStyles = {
             <button onClick={() => setOpenModal(false)} className="absolute top-8 right-7 text-white bg-gray-200/[.06] rounded-full p-2 hover:bg-gray-200/[0.7] transition duration-200">
                 <CloseIcon/>
             </button>
-            <img src={image} alt="Post" className="rounded-lg object-contain" style={{maxHeight: '98vh', maxWidth: '98vh'}}/>
+            <img src={image} alt="Post" className="rounded-lg object-contain" style={{maxHeight: '98vh', maxWidth: '98vw'}}/>
           </div>
         </Modal>
       </>

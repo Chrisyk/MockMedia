@@ -8,43 +8,17 @@ import { useEffect, useState } from 'react';
 import Post from '../Post'
 import AllMessages from '../AllMessages';
 import Axios from 'axios';
-import Toaster from '../Toaster';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import backendBaseUrl from '../../config';
+import "./index.scss";
 
 
-const Dashboard = () => {
+const Dashboard = ( { loadingNotificationData, notificationData } ) => {
 
   const username = localStorage.getItem('username');
-  const token = localStorage.getItem('token');
   const [messagesUpdate, setMessagesUpdate] = useState(0);
   const [chatData, setChatData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [socket, setSocket] = useState(null);
-  const [popNotificationData, setPopNotificationData] = useState([]);
-  const [loadingNotificationData, setLoadingNotificationData] = useState(true);
-  const [notificationData, setNotificationData] = useState([]);
-
-  useEffect(() => {
-    const ws = new WebSocket(`ws://${backendBaseUrl}/ws/notifications/${username}/`);
-    setSocket(ws);
-  },[username, token]);
-
-  useEffect(() => {
-      if (!socket) return;
-      socket.onmessage = (event) => {
-          const data = JSON.parse(event.data);
-          setNotificationData(data);
-          console.log(data);
-          if (data && data.message) {
-            const newNotification = data.message;
-            setPopNotificationData(oldNotifications => [...oldNotifications, newNotification]);
-            let audio = new Audio('https://mockmedia.s3.amazonaws.com/notification.mp3');
-            audio.play();
-          }
-          setLoadingNotificationData(false);
-      };
-  }, [socket]);
 
   // Get the all chats
   useEffect(() => {
@@ -107,18 +81,8 @@ const Dashboard = () => {
 
   return (
   <>
-<div style={{ position: 'fixed', right: 15, top: 15 }}>
-  {popNotificationData ? (
-    popNotificationData.map((notification, index) =>
-    <Toaster
-      key={index}
-      notification={notification}
-    />
-      ))
-  : null}
-</div>
   <Sidebar aria-label="Default sidebar example">
-    <Sidebar.Logo href="/" img={Logo} imgAlt="Logo">
+    <Sidebar.Logo img={Logo} imgAlt="Logo">
       MockMedia
     </Sidebar.Logo>
     <Sidebar.Items>

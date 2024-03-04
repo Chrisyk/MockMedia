@@ -22,7 +22,6 @@ class NotificationConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        print(self.room_group_name)
         self.accept()
         # Send all notifications in the database
         chatNotification = ChatNotification.objects.filter(user=self.user)
@@ -36,7 +35,6 @@ class NotificationConsumer(WebsocketConsumer):
     def notification_message(self, event):
         chatNotification = ChatNotification.objects.filter(user=self.user)
         chat_notification_serializer = ChatNotificationSerializer(chatNotification, many=True)
-        print(event['message']['type'])
         if event['message']['type'] == 'message':
             self.user.profile.messages += 1
         else:
@@ -90,7 +88,6 @@ class ChatConsumer(WebsocketConsumer):
         cache.set(f'heartbeat_{self.room_group_name}_{self.sender_user.username}', True, 30)
         # Schedule the next heartbeat check
         channel_layer = get_channel_layer()
-        print("Checking hearbeat: ", f'heartbeat_{self.room_group_name}_{self.sender_user.username}')
         async_to_sync(channel_layer.send)(self.room_group_name, {
             'type': 'heartbeat.check'
         })

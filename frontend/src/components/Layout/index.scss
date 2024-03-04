@@ -46,3 +46,18 @@
     min-height: 500px;
 
 }
+
+@media (max-width: 1024px) {
+    .trending {
+      display: none;
+    }
+    .page {
+      padding-left: 0;
+    }
+  }
+
+@media (min-width: 1024px) {
+  .ultility-button{
+    display: none;
+  }
+}

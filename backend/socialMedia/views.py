@@ -32,7 +32,6 @@ def send_notification(request, username, post, token, type, topic_arn):
     notification.save()
     receiveUser.save()
     client = boto3.client('sns', region_name=os.getenv('REGION_NAME'))
-    print ("sender: ", sendUser.username, "receiver: ", receiveUser.username, "type: ", type, "topic_arn: ", topic_arn)
     message = {
         'recipient': username,
         'username': sendUser.username,
@@ -50,7 +49,6 @@ def get_notification(request, username):
     if request.method == 'POST':
         notification_data = json.loads(request.body)
         channel_layer = get_channel_layer()
-        print(notification_data)
         async_to_sync(channel_layer.group_send)(
             f'notifications_{username}',
             {
@@ -83,7 +81,6 @@ def delete_all_notifications(request):
     profile.save()
     allNotifications = Notification.objects.filter(receiver=request.user)
     allNotifications.delete()
-    print("Deleted all notifications")
     return Response(status=status.HTTP_200_OK)
 
 # API Request to login a user
@@ -201,19 +198,15 @@ def change_profile(request, username):
         profile = Profile(user=user)
         profile.save()
     if request.data.get('newProfile'):
-        print('Changing profile picture')
         profile.picture = request.data.get('newProfile')
     if request.data.get('newBanner'):
-        print('Changing banner')
         profile.banner = request.data.get('newBanner')
     if request.data.get('newUsername'):
-        print('Changing username')
         user.username = request.data.get('newUsername')
     if request.data.get('description') == '':
         profile.description = ''
     else:
         profile.description = request.data.get('newDescription')
-    print('description:', profile.description)
     profile.save()
     user.save()
     return Response(status=status.HTTP_200_OK)
@@ -301,7 +294,6 @@ def new_post(request):
     post = Post(author=user, content=content)
     post.save()
     files = request.FILES.getlist('files[]')
-    print("Number of files received:", len(files))
     for image_file in files:
         img = Image(image=image_file)
         img.save()
@@ -321,7 +313,6 @@ def new_reply(request, post_id):
     post.save()
     send_notification(request, parent.author.username, post, token, "comment", os.getenv('COMMENT_TOPIC_ARN'))
     files = request.FILES.getlist('files[]')
-    print("Number of files received:", len(files))
     for image_file in files:
         img = Image(image=image_file)
         img.save()
@@ -343,17 +334,13 @@ def like_post(request, post_id):
         raise ValueError("User is None")
     if post.likes.filter(id=user.id).exists():
         post.likes.remove(user)
-        print("Removed Like")
         added = False
     else:
         notificationAlreadyExists = Notification.objects.filter(sender=user, post_id=post, type="like").exists()
         if not notificationAlreadyExists:
             send_notification(request, post.author.username, post, token, "like", os.getenv('LIKE_TOPIC_ARN'))
-        else: print("Notification already exists")
         post.likes.add(user)
-        print("Added Like")
         added = True
-    print("Number of likes:", post.likes.count())
     post.save()
     return Response({'added': added, 'total_likes': post.likes.count()}, status=status.HTTP_200_OK)
 
@@ -372,16 +359,13 @@ def follow_user(request, username):
         followed_profile.followers.remove(request_profile)
         request_profile.following.remove(request_profile)
         follows = False
-        print("Unfollowed")
     else:
         followed_profile.followers.add(request_profile)
         request_profile.following.add(followed_profile)
         notificationAlreadyExists = Notification.objects.filter(sender=request_user, post_id=None, type="follow").exists()
         if not notificationAlreadyExists:
             send_notification(request, followed_user.username, None, token, "follow", os.getenv('FOLLOW_TOPIC_ARN'))
-        else: print("Notification already exists")
         follows = True
-        print("Followed")
     request_profile.save()
     followed_profile.save()
     return Response({'follows': follows},status=status.HTTP_200_OK)
@@ -413,7 +397,6 @@ class SearchView(APIView):
 def get_weather(request):
     latitude = request.GET.get('latitude')
     longitude = request.GET.get('longitude')
-    print("Latitude: ",latitude,"Longitude: ", longitude)
     response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={os.getenv("WEATHER_API_KEY")}')
     data = response.json()
     return JsonResponse(data, safe=False)
