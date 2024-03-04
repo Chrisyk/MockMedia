@@ -3,6 +3,7 @@ import { Button } from "flowbite-react";
 import { useState } from "react";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import backendBaseUrl from "../../config";
 
 function HeartButton({ postId, Liked, likesCount }) {
     const [isLiked, setIsLiked] = useState(Liked);
