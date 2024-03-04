@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to="profpics", blank=True)
-    description = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     banner = models.ImageField(upload_to="banners", blank=True, null=True)
     following = models.ManyToManyField('self', related_name='followers', symmetrical=False, blank=True)
     notifications = models.IntegerField(default=0)
