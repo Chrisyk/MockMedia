@@ -19,8 +19,7 @@ function PostTemplate ({ posts, Likes}) {
                 <div className="profile flex gap-4 items-center">
                     <AvatarDropdown username={post.author} avatar={post.profile_picture} className="absolute z-10"/>
                     <h2 className="username text-2xl font-bold">{post.author}</h2>
-                    
-                    <p className='date'>{post.date_posted}</p>
+                    <p className='date text-base mt-1'>{post.date_posted}</p>
                 </div>
                 {post.author === username ? <PostOptions postId={post.id}/> : null}
                 </div>
