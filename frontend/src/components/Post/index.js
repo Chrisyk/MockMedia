@@ -58,7 +58,7 @@ function Post() {
         <Modal.Body>
           <div className="space-y-6">
           <Textarea id="text" placeholder="Say something!" required rows={4} onChange={handleTextChange}/>
-          <FileInput id="files" multiple accept="image/*,video/mp4" onChange={handleFileChange}/>
+          <FileInput id="files" multiple accept="image/*" onChange={handleFileChange}/>
           </div>
         </Modal.Body>
         <Modal.Footer>

@@ -1,0 +1,15 @@
+Frontend:
+
+1) git pull
+2) npm build
+3) sudo cp -r /root/MockMedia/frontend/build/* /var/www/
+4) sudo chown -R www-data:www-data /var/www
+5) sudo nginx -s reload
+
+Backend:
+
+1) git pull
+2) screen -ls
+3) go in the screen where the server is running
+4) screen -r <session_id>
+5) stop the server and run again
