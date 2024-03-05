@@ -33,19 +33,24 @@ const Home = () => {
         });
     }, []);
 
+    if (isLoading) {
+        return (
+            <div className="home relative h-full min-h-screen w-full pl-20 pr-20 bg-gray-100">
+            <h1 className="home-text text-4xl font-bold mt-2">Home</h1>
+            <div className="border mb-2 mt-2"></div>
+            <div className="loading">
+            <Loading />
+            <Loading />
+            </div> 
+            </div>
+        )
+    }
 
     return (
         <div className="home relative h-full min-h-screen w-full pl-20 pr-20 bg-gray-100">
         <h1 className="home-text text-4xl font-bold mt-2">Home</h1>
         <div className="border mb-2 mt-2"></div>
-        {isLoading ? 
-            <div className="loading">
-            <Loading />
-            <Loading />
-            </div> 
-            :
-            <PostTemplate posts={posts} Likes={Likes}/>
-        }
+        <PostTemplate posts={posts} Likes={Likes}/>
         </div>
     );
 };
