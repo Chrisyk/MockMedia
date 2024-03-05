@@ -154,14 +154,14 @@ function Trending() {
         <Card
             className="max-w mb-5"
             imgAlt="Meaningful alt text for an image that is not purely decorative"
-            imgSrc="https://mockmedia.s3.amazonaws.com/cardImage.jpg"
-            href="https://christopher-ko.com/"
+            imgSrc="https://mockmedia.s3.amazonaws.com/20220708_173859.jpg"
+            href="https://christopher-ko.com/" target="_blank"
             >
             <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 Portfolio
             </h5>
             <p className="font-normal text-gray-700 dark:text-gray-400">
-                My name is Christopher and I'm a web developer. I'm passionate about creating beautiful and functional websites.
+                My name is Christopher and I'm a web developer.
             </p>
         </Card>
         </div>

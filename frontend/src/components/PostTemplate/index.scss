@@ -2,19 +2,33 @@
     .date {
         display: none;
     }
+    .username {
+        font-size: 18px;
+    }
     .post {
-        padding: 0 10px;
+        padding: 0 6px;
         width: 100%;
-        padding-top: 10px;
-        padding-bottom: 5px;
+        padding-top: 12px;
         margin-top: 2px;
     }
     .content {
         padding: 0px;
         padding-top: 2px;
-        padding-bottom: 10px;
+        padding-bottom: 0px;
+        margin-left: 5px;
     }
     .likes-comments{
         margin-top: 5px;
+    }
+    .profile {
+        gap: 6px;
+        padding-left: 5px;
+    }
+    .reply {
+        font-size: 16px;
+        margin-left: 5px;
+    }
+    .image {
+        gap: 6px;
     }
 }

@@ -98,7 +98,11 @@ function PostScreen() {
             </div>
             <PostTemplate posts={[postData]} Likes={mainLikes}/>
         <div>
-            {postData.comments.length > 0 ? <h3 className="comments-text text-xl font-semibold text-gray-800 mb-4">Comments</h3> : <h3 className="text-center ml-10 mr-10">No Comments</h3>}
+            {postData.comments.length > 0 ? 
+            <div className="border-b pb-1 mb-3">
+            <h3 className="comments-text text-xl font-semibold text-gray-800">Comments</h3>
+            </div>
+             : <h3 className="text-center ml-10 mr-10">No Comments</h3>}
             <PostTemplate posts={comments} Likes={Likes}/>
             </div> 
         </div>
