@@ -117,7 +117,7 @@ function Trending() {
         <Card className="max-w mb-5">
         <div className="mb-4 flex items-center justify-between">
             <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">Users</h5>
-            <UserList users={users} onClick={handleFollowUpdate} isLoading={isLoading} text="Show More" title="All Users"/>
+            <UserList users={users} onClick={handleFollowUpdate} isLoading={isLoading} text="Show More" size="base" title="All Users"/>
         </div>
         <div className="flow-root">
             <ul className="divide-y divide-gray-200 dark:divide-gray-700">

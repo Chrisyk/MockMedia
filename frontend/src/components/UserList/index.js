@@ -3,7 +3,7 @@ import AvatarDropdown from '../AvatarDropdown';
 import React, { useState } from 'react';
 import Follow from '../Follow';
 
-function UserList( {users, text, onClick, isLoading, title} ) {
+function UserList( {users, text, onClick, isLoading, size, title} ) {
   const [openModal, setOpenModal] = useState(false);
   const id = localStorage.getItem('id');
   const username = localStorage.getItem('username');
@@ -17,7 +17,11 @@ function UserList( {users, text, onClick, isLoading, title} ) {
   }
   return (
     <>
+    {size === "base" ?
+    <p className="cursor-pointer text-base hover:underline" onClick={handleResponse}>{text}</p>
+    :  
     <p className="cursor-pointer hover:underline" onClick={handleResponse}>{text}</p>
+    }
     <Modal show={openModal} onClose={() => setOpenModal(false)}>
       <Modal.Header> 
         <p className="text-xl font-bold leading-none text-gray-900 dark:text-white">{title}</p>
