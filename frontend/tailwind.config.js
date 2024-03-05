@@ -18,6 +18,13 @@ module.exports = {
           textColor: ['hover', 'active'],
         },
       },
+      spacing: {
+        '5vw': '5vw',
+        '7vw': '7vw',
+        '8vw': '8vw',
+        '9vw': '9vw',
+        '10vw': '10vw',
+      },
       keyframes: {
         fadeInOut: {
           '0%': { opacity: '1' },

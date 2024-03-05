@@ -11,6 +11,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@layer components {
+  .p-scale {
+    padding: 0rem clamp(0.5rem, 6.5vw, 150px);
+  }
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

@@ -78,7 +78,7 @@ function Account() {
     <div className="relative w-full h-full overflow-hidden">
         <Banner url={accountData.banner}/>
         <div className="posts mt-28 bg-gray-100 h-full flex flex-col justify-items-start gap-3 pt-20">
-            <div className="post-area pl-20 pr-20">
+            <div className="post-area p-scale">
             <Avatar img={accountData.profile_picture} className="w-32 h-0 object-cover rounded-full border-1 pb-12 pr-12 border-gray-300" size="lg" rounded bordered/>
             <div className="flex justify-between gap-4 items-center">
             <h2 className="text-2xl font-bold text-gray-800">{accountData.username}</h2>
@@ -93,7 +93,7 @@ function Account() {
                 <UserList users={accountData.following} onClick={handleFollowUpdate} isLoading={isLoading} text="Following" title="Following"/>
             </div>
             </div>
-            <div className="post-area border-t pr-20 pl-20">
+            <div className="post-area border-t p-scale">
             <h2 className="post-text text-2xl font-bold pt-5">Posts</h2>
                 <PostTemplate posts={posts} Likes={Liked} />
             </div>
