@@ -27,9 +27,6 @@ const Home = () => {
                 };
             }
             setLiked(newPostLikes);
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 3000);
         }).catch(error => {
             console.error('Error:', error);
         });
