@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from 'react-modal';
 import CloseIcon from '@mui/icons-material/Close';
+import LazyLoad from 'react-lazy-load';
 
 const customStyles = {
     overlay: {
@@ -40,7 +41,9 @@ const customStyles = {
             <button onClick={() => setOpenModal(false)} className="absolute top-8 right-7 text-white bg-gray-200/[.06] rounded-full p-2 hover:bg-gray-200/[0.7] transition duration-200">
                 <CloseIcon/>
             </button>
-            <img src={image} alt="Post" className="rounded-lg object-contain" style={{maxHeight: '98vh', maxWidth: '98vw'}}/>
+            <LazyLoad height={762} once >
+            <img src={image} alt="Post" loading="lazy" className="rounded-lg object-contain" style={{maxHeight: '98vh', maxWidth: '98vw'}}/>
+            </LazyLoad>
           </div>
         </Modal>
       </>
