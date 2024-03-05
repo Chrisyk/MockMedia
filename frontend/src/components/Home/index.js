@@ -27,6 +27,7 @@ const Home = () => {
                 };
             }
             setLiked(newPostLikes);
+            setIsLoading(false);
         }).catch(error => {
             console.error('Error:', error);
         });
