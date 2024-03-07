@@ -22,7 +22,7 @@ function Account() {
 
     // Gets the posts
     useEffect(() => {
-        Axios.get(`${backendBaseUrl}/api/posts/user/${username}/`, {
+        Axios.get(`https://${backendBaseUrl}/api/posts/user/${username}/`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },
