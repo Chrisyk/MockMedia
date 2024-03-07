@@ -19,7 +19,7 @@ function Messages() {
 
     useEffect(() => {
         if (username === localUsername) navigate('/');
-        const ws = new WebSocket(`ws://${backendBaseUrl}/ws/socket-server/${username}/${token}/`);
+        const ws = new WebSocket(`wss://${backendBaseUrl}/ws/socket-server/${username}/${token}/`);
         setSocket(ws);
     },[username, token, localUsername, navigate]);
     

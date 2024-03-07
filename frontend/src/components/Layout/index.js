@@ -31,7 +31,7 @@ const Layout = () => {
     }, []);
 
     useEffect(() => {
-      const ws = new WebSocket(`ws://${websocketBaseURL}/ws/notifications/${username}/`);
+      const ws = new WebSocket(`wss://${websocketBaseURL}/ws/notifications/${username}/`);
       setSocket(ws);
     },[username, token]);
   
