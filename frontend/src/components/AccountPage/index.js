@@ -46,7 +46,7 @@ function Account() {
     // Get the account data
     useEffect(() => {
         setIsLoading(true);
-        Axios.get(`${backendBaseUrl}/api/account/${username}`, {
+        Axios.get(`https://${backendBaseUrl}/api/account/${username}`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },
