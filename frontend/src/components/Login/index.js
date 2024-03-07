@@ -30,7 +30,7 @@ const LoginPage = () => {
             // Get the CSRF token from the cookie
             // Prevents Cross Site Request Forgery attacks
             const csrfToken = Cookies.get('csrftoken');
-            const response = await axios.post(`https://${backendBaseUrl}/api/login/`, {
+            const response = await axios.post(`http://${backendBaseUrl}/api/login/`, {
                 username,
                 password,
             }, {

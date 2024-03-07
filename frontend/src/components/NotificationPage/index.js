@@ -15,7 +15,7 @@ function NotificationPage () {
     const localUser = localStorage.getItem('username');
 
     useEffect(() => {
-        Axios.get(`https://${backendBaseUrl}/api/notifications/`, {
+        Axios.get(`http://${backendBaseUrl}/api/notifications/`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },
@@ -30,7 +30,7 @@ function NotificationPage () {
     }, []);
 
     function clearNotifications() {
-        Axios.delete(`https://${backendBaseUrl}/api/notifications/delete`, {
+        Axios.delete(`http://${backendBaseUrl}/api/notifications/delete`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },

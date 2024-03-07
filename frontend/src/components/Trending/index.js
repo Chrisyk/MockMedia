@@ -17,7 +17,7 @@ function Trending() {
 
     useEffect(() => {
         setIsLoading(true);
-        Axios.get(`https://${backendBaseUrl}/api/accounts/`, {
+        Axios.get(`http://${backendBaseUrl}/api/accounts/`, {
         headers: {
             'Authorization': `Token ${localStorage.getItem('token')}`
         },
@@ -36,7 +36,7 @@ function Trending() {
     };
 
     const handleSearchUpdate = async (event) => {
-        const response = await Axios.get(`https://${backendBaseUrl}/api/search/`, {
+        const response = await Axios.get(`http://${backendBaseUrl}/api/search/`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },
@@ -60,7 +60,7 @@ function Trending() {
                 let longitude = position.coords.longitude;
         
                 console.log(latitude);
-                fetch(`https://${backendBaseUrl}/api/get_weather/?latitude=${latitude}&longitude=${longitude}`, {
+                fetch(`http://${backendBaseUrl}/api/get_weather/?latitude=${latitude}&longitude=${longitude}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Token ${localStorage.getItem('token')}`

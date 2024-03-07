@@ -11,7 +11,7 @@ function PostOptions({ postId }) {
 
   function deletePost() {
     const token = localStorage.getItem('token');
-    axios.delete(`https://${backendBaseUrl}/api/posts/${postId}/delete/`, {
+    axios.delete(`http://${backendBaseUrl}/api/posts/${postId}/delete/`, {
       headers: {
         'Authorization': `Token ${token}`
       },

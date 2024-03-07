@@ -27,7 +27,7 @@ function EditAccount() {
 
     // Get the account data
     useEffect(() => {
-        Axios.get(`https://${backendBaseUrl}/api/account/${username}`, {
+        Axios.get(`http://${backendBaseUrl}/api/account/${username}`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },

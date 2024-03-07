@@ -9,7 +9,7 @@ const useAuth = () => {
 
   const logout = async () => {
     try {
-      await axios.get(`https://${backendBaseUrl}/api/logout/`);
+      await axios.get(`http://${backendBaseUrl}/api/logout/`);
       localStorage.removeItem('token');
       navigate('/login');
     } catch (error) {

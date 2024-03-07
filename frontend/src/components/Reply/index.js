@@ -28,7 +28,7 @@ function Post( { postId, numComments}) {
         }
 
         try {
-          const response = await axios.post(`https://${backendBaseUrl}/api/newpost/${postId}/`, formData, {
+          const response = await axios.post(`http://${backendBaseUrl}/api/newpost/${postId}/`, formData, {
               headers: {
                   'Authorization': `Token ${localStorage.getItem('token')}`,
               },

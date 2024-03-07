@@ -20,7 +20,7 @@ function PostScreen() {
 
     const getPost = useCallback(async () => {
         const token = localStorage.getItem('token');
-        axios.get(`https://${backendBaseUrl}/api/posts/${id}`, {
+        axios.get(`http://${backendBaseUrl}/api/posts/${id}`, {
             headers: {
                 'Authorization': `Token ${token}`
             },
@@ -55,7 +55,7 @@ function PostScreen() {
         if (postLoaded && postData && postData.comments) {
             const token = localStorage.getItem('token');
             Promise.all(postData.comments.map(commentId => 
-                axios.get(`https://${backendBaseUrl}/api/posts/${commentId}`, {
+                axios.get(`http://${backendBaseUrl}/api/posts/${commentId}`, {
                     headers: {
                         'Authorization': `Token ${token}`
                     },

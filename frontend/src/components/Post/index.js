@@ -33,7 +33,7 @@ function Post() {
         }
 
         try {
-          const response = await axios.post(`https://${backendBaseUrl}/api/newpost/`, formData, {
+          const response = await axios.post(`http://${backendBaseUrl}/api/newpost/`, formData, {
               headers: {
                   'Authorization': `Token ${localStorage.getItem('token')}`,
               },
