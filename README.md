@@ -1,6 +1,6 @@
 # MockMedia
 
-MockMedia is a three-tier web application leveraging React, Django, and MySQL. It ultilizes AWS micro-services, such as Amazon Relational Database, Amazon Simple Notification Service, AWS Lambda, and Amazon Simple Storage Service to provide a completely decoupled architecture. The communication protocol (ASGI) provides real-time communication between servers, allowing features such as real-time notifications and messaging. Both servers are hosted on Amazon Elastic Compute Cloud which makes communication extremely fast and secure.
+MockMedia is a three-tier web application leveraging React, Django, and MySQL. It utilizes AWS micro-services, such as Amazon Relational Database, Amazon Simple Notification Service, AWS Lambda, and Amazon Simple Storage Service, to provide an entirely decoupled architecture. The communication protocol (ASGI) provides real-time communication between servers, allowing features such as real-time notifications and messaging. Both servers are hosted on Amazon Elastic Compute Cloud, making communication extremely fast and secure.
 
 ## Features
 
@@ -27,7 +27,7 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 
 - Django REST Framework
 - Django Channels
-- Uvnicorn
+- Uvicorn
 
 ### Cloud Services
 
@@ -43,7 +43,7 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 
 1. Clone the git repository to your local machine
 
-2. Make a virtual environment for both backend and frontend.(recommended)
+2. Make a virtual environment for both the backend and frontend. (recommended)
 
 ### React
 
@@ -51,13 +51,13 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 
 4. Install the latest version of npm (node package manager).
 
-5. Install the latest version of Node.js (use nvm for easy instalation).
+5. Install the latest version of Node.js (use nvm for easy installation).
 
 6. Install all of the node modules with the command ```npm install``` or ```yarn install``` if using yarn.
 
-7. Make sure the client can run ultilizing ```npm start```
+7. Make sure the client can run utilizing ```npm start```
 
-- optional: if you are running django from another webserver, change settings.js to the backend public url instead of localhost
+- optional: if you are running Django from another web server, change settings.js to the backend public URL instead of localhost
 
 ### Django
 
@@ -65,7 +65,7 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 
 9. Open the .env file
 
-10. Fill in all of the API keys and Login from AWS, Redis Labs, Weather API, etc.
+10. Fill in all the API keys and log in from AWS, Redis Labs, Weather API, etc.
 
 11. Make sure pip, Python=^3.17, and Django are installed
 
@@ -77,7 +77,7 @@ MockMedia is a three-tier web application leveraging React, Django, and MySQL. I
 
 ### Execution
 
-15. In the frontend folder, run ```npm start``` and open to the localhost link to your browser
+15. In the frontend folder, run ```npm start``` and open the localhost link to your browser
 
 16. Create a separate terminal and
 in the backend folder, run ```python manage.py runserver```
