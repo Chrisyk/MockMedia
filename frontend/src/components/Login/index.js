@@ -30,7 +30,7 @@ const LoginPage = () => {
             // Get the CSRF token from the cookie
             // Prevents Cross Site Request Forgery attacks
             const csrfToken = Cookies.get('csrftoken');
-            const response = await axios.post(`http://${backendBaseUrl}/api/login/`, {
+            const response = await axios.post(`https://${backendBaseUrl}/api/login/`, {
                 username,
                 password,
             }, {
@@ -52,7 +52,7 @@ const LoginPage = () => {
         return (
           <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" href="http://christopher-ko.com/">
+            <Link color="inherit" href="https://christopher-ko.com/">
               Christopher Ko
             </Link>{' '}
             {new Date().getFullYear()}

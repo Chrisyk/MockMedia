@@ -11,7 +11,7 @@ const Home = () => {
     const [isLoading, setIsLoading] = useState(true);
     
     useEffect(() => {
-            Axios.get(`http://${backendBaseUrl}/api/posts/`, {
+            Axios.get(`https://${backendBaseUrl}/api/posts/`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },

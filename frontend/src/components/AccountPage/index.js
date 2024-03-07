@@ -22,7 +22,7 @@ function Account() {
 
     // Gets the posts
     useEffect(() => {
-        Axios.get(`http://${backendBaseUrl}/api/posts/user/${username}/`, {
+        Axios.get(`${backendBaseUrl}/api/posts/user/${username}/`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },
@@ -46,7 +46,7 @@ function Account() {
     // Get the account data
     useEffect(() => {
         setIsLoading(true);
-        Axios.get(`http://${backendBaseUrl}/api/account/${username}`, {
+        Axios.get(`${backendBaseUrl}/api/account/${username}`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },

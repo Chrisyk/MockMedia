@@ -24,7 +24,7 @@ function Messages() {
     },[username, token, localUsername, navigate]);
     
     useEffect(() => {
-        Axios.get(`http://${backendBaseUrl}/api/chats/${username}/`, {
+        Axios.get(`https://${backendBaseUrl}/api/chats/${username}/`, {
             headers: {
                 'Authorization': `Token ${token}`
             },

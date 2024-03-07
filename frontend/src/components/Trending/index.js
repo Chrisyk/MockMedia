@@ -17,7 +17,7 @@ function Trending() {
 
     useEffect(() => {
         setIsLoading(true);
-        Axios.get(`http://${backendBaseUrl}/api/accounts/`, {
+        Axios.get(`https://${backendBaseUrl}/api/accounts/`, {
         headers: {
             'Authorization': `Token ${localStorage.getItem('token')}`
         },
@@ -36,7 +36,7 @@ function Trending() {
     };
 
     const handleSearchUpdate = async (event) => {
-        const response = await Axios.get(`http://${backendBaseUrl}/api/search/`, {
+        const response = await Axios.get(`https://${backendBaseUrl}/api/search/`, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
             },
@@ -60,7 +60,7 @@ function Trending() {
                 let longitude = position.coords.longitude;
         
                 console.log(latitude);
-                fetch(`http://${backendBaseUrl}/api/get_weather/?latitude=${latitude}&longitude=${longitude}`, {
+                fetch(`https://${backendBaseUrl}/api/get_weather/?latitude=${latitude}&longitude=${longitude}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Token ${localStorage.getItem('token')}`
@@ -140,7 +140,7 @@ function Trending() {
             <div className="bg-gradient-to-t from-blue-300 to-blue-500 flex flex-col items-center justify-center p-4 mb-5 max-w text-white rounded">
             <h2 className="text-2xl mb-2" style={{ fontFamily: 'Roboto' }}>{weather.name}</h2>
             <img
-                src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
+                src={`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
                 alt={weather.weather[0].description}
             />
             <h1 className="text-4xl font-bold mt-2">

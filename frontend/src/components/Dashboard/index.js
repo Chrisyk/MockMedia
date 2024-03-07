@@ -24,7 +24,7 @@ const Dashboard = ( { loadingNotificationData, notificationData } ) => {
   useEffect(() => {
     setIsLoading(true);
     if (username) {
-    Axios.get(`http://${backendBaseUrl}/api/chats`, {
+    Axios.get(`https://${backendBaseUrl}/api/chats`, {
         headers: {
             'Authorization': `Token ${localStorage.getItem('token')}`
         },

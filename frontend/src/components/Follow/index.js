@@ -15,7 +15,7 @@ function Follow( {username, onClick, followed} ) {
 
     async function follow() {
         try{
-            const response = await axios.post(`http://${backendBaseUrl}/api/account/${username}/follow/`, {}, {
+            const response = await axios.post(`https://${backendBaseUrl}/api/account/${username}/follow/`, {}, {
                 headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`
                 },
