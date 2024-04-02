@@ -53,7 +53,7 @@ function EditAccount() {
                 formData.append('newUsername', newUsername);
             }
             formData.append('newDescription', newDescription);
-            const response = await Axios.post(`https://${backendBaseUrl}/api/account/${username}/change/`, formData,{
+            const response = await Axios.post(`http://${backendBaseUrl}/api/account/${username}/change/`, formData,{
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`
                     },

@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout
@@ -282,6 +283,10 @@ def get_post(request, post_id):
     response["Access-Control-Allow-Origin"] = "*"
     return response
 
+from PIL import Image as PilImage
+from io import BytesIO
+from django.core.files import File
+
 # Creates a new post
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -292,7 +297,17 @@ def new_post(request):
     post.save()
     files = request.FILES.getlist('files[]')
     for image_file in files:
-        img = Image(image=image_file)
+        # Open the image file using Pillow
+        img = PilImage.open(image_file)
+
+        # Compress the image
+        output_io_stream = BytesIO()
+        img.save(output_io_stream, format='png', quality=70)
+        output_io_stream.seek(0)
+
+        # Create a Django file object
+        django_file = File(output_io_stream, name=image_file.name)
+        img = Image(image=django_file)
         img.save()
         post.images.add(img)
     post.save()
@@ -374,6 +389,18 @@ def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if post.author != request.user:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+    # Create a session using your AWS credentials
+    session = boto3.session.Session()
+    # Create an S3 resource object using the session
+    s3 = session.resource('s3')
+
+    # Loop through each image in the post
+    for image in post.images.all():
+        # Parse the image URL to get the image key
+        image_key = urlparse(image.image.url).path.lstrip('/')
+
+        # Delete the image from S3
+        s3.Object(os.getenv("AWS_STORAGE_BUCKET_NAME"), image_key).delete()
     post.delete()
     return Response(status=status.HTTP_200_OK)
 
